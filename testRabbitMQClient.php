@@ -27,4 +27,4 @@ print_r($response);
 echo "\n\n";
 
 echo $argv[0]." END".PHP_EOL;
-
+$myfile = file_put_contents('logger.log',$msg.PHP_EOL , FILE_APPEND);
