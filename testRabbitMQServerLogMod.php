@@ -6,6 +6,7 @@ require_once('rabbitMQLib.inc');
 require_once('logger.php'); // Oh boy new thing
 
 $logger = new CentralizedLogger(); // CALLING AND CREATING THE LOGGER
+//set_error_handler($logger)
 // CHANGE THE ERROR HANDLER
 
 function doLogin($username,$password)

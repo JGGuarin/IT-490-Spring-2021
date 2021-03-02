@@ -16,7 +16,7 @@ class CentralizedLogger
         fwrite($logFile, "centralizedLogger BEGIN".PHP_EOL);
     
         $logServer = new rabbitMQServer("testRabbitMQ.ini","loggerServer");
-        $logServer->process_requests('requestProcessor');
+        $logServer->process_requests(array($this, 'requestProcessor'));
     }
 
     function requestProcessor($requestData)
@@ -27,7 +27,7 @@ class CentralizedLogger
     }
 }
 
-// Will be used for a distibuted logger
+// Will be used for a distributed logger
 class LoggerServer
 {
     // Automatically called when creating an object from a class
@@ -37,7 +37,7 @@ class LoggerServer
     }
 }
 
-// Will be used for a distibuted logger
+// Will be used for a distributed logger
 class LoggerClient
 {
     // Automatically called when creating an object from a class
