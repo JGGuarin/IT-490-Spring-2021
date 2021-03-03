@@ -5,13 +5,15 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 require_once('logger.php'); // Oh boy new thing
 
+
 $logger = new CentralizedLogger(); // CALLING AND CREATING THE LOGGER
-//set_error_handler($logger)
+set_error_handler(array($logger, 'errorLog'));
 // CHANGE THE ERROR HANDLER
+
 
 function doLogin($username,$password)
 {
-    // lookup username in databas
+    // lookup username in database
     // check password
     return true;
     //return false if not valid
@@ -32,6 +34,7 @@ function requestProcessor($request)
     case "validate_session":
       return doValidate($request['sessionId']);
   }
+  logg($request);
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
 

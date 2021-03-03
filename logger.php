@@ -13,8 +13,9 @@ class CentralizedLogger
         // Creates the log file if it doesn't exist and appends to it
         $logFile = fopen("centralizedLog.log", "a");
         echo "centralizedLogger BEGIN".PHP_EOL;
-        fwrite($logFile, "centralizedLogger BEGIN".PHP_EOL);
-    
+        fwrite($logFile, PHP_EOL);
+        fwrite($logFile, "centralizedLogger BEGIN (at ".date(DATE_RFC2822).")".PHP_EOL);  
+        fwrite($logFile, "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV".PHP_EOL);  
         $logServer = new rabbitMQServer("testRabbitMQ.ini","loggerServer");
         $logServer->process_requests(array($this, 'requestProcessor'));
     }
@@ -24,6 +25,19 @@ class CentralizedLogger
         echo "received request".PHP_EOL;
         print_r($requestData);
         fwrite($logFile, $requestData);
+    }
+
+    function errorLog($errno, $errstr, $errfile, $errline)
+    {
+        $errorMsg = "Error Number: ".$errorno.": ".$errfile.": ".$errline.": ".$errstr.PHP_EOL;
+        fwrite($logFile, $errorMsg);
+    }
+
+    function __destruct()
+    {
+        fwrite($logFile, "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^".PHP_EOL); 
+        write($logFile, "centralizedLogger END (at ".date(DATE_RFC2822).")".PHP_EOL); 
+        fclose($logFile);
     }
 }
 
