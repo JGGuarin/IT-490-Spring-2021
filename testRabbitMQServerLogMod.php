@@ -34,7 +34,6 @@ function requestProcessor($request)
     case "validate_session":
       return doValidate($request['sessionId']);
   }
-  logg($request);
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
 
