@@ -9,6 +9,25 @@ function myFunction() {
   }
 }
 
+function dropdownFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(e) {
+  if (!e.target.matches('.dropbtn')) {
+  var myDropdown = document.getElementById("myDropdown");
+    if (myDropdown.classList.contains('show')) {
+      myDropdown.classList.remove('show');
+    }
+  }
+}
+
+function createdLeaugueAlert(){
+  alert('League has been created!');
+}
+
+
 //from w3schools - https://www.w3schools.com/howto/howto_js_filter_table.asp
 $(document).ready(function(){
   $('#playerInput').on('keyup', function(){

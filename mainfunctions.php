@@ -150,7 +150,6 @@ function doesUserExist($username){
     return true;
 }
 
-
 function createUserAccount($username, $password, $firstname, $lastname){
     global $db, $t;
 
@@ -197,7 +196,6 @@ function getUserLeagues($userID){
 
     return $leagueNames;
 }
-
 
 function displayPlayersNames(){
     global $db, $t;
@@ -324,7 +322,6 @@ function displayTeamPlayersInfo($infoNeeded, $fullName){
 function displayLeagueMembers($leagueID){
     global $db, $t;
 
-
     $s = "SELECT * FROM Team where LeagueID = '$leagueID'";
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
     $num = mysqli_num_rows($t);
@@ -353,8 +350,41 @@ function displayLeagueMembers($leagueID){
 
 }
 
+function createALeauge($leagueName, $userID, $username, $memberArray){
+    global $db, $t;
+
+    $s = "INSERT INTO League(`LeagueName`, `CreatorID`, `CreatorName`) VALUES ('$leagueName', '$userID', '$username')";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+   //dont know why $leagueID = getLeagueID($leagueName) is not working :/
+   $s = "select LeagueID from League where LeagueName='$leagueName'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+
+    $leagueID = $r["LeagueID"];
 
 
+    foreach($memberArray as $member){
+        $s = "SELECT * from Users where Username = '$member'";
+        ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+        $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+        $memberUserID = $r["UserID"];
+
+        echo "userID: $memberUserID";
+
+        $s = "INSERT INTO Team(`LeagueID`, `UserID`, `TeamName`) VALUES ('$leagueID', '$memberUserID', 'Team $member')";
+        ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    
+    }
+
+    return $leagueID;
+}
+
+function addAFriend($userID, $friendUsername){
+
+}
 
 
 

@@ -16,39 +16,145 @@ if (! $_SESSION["logged"]){
 }
 
 
-echo "Hello, $firstname $lastname";
-echo "<br>Username: $username";
-
-echo "<hr>";
-
 $leagues = getUserLeagues($userID);
-
-foreach ($leagues as $league){
-    echo "<li>League $league<br>";
-}
-//create a league option
-
-
-
-//join a league
-
 
 ?>
 
 <!doctype html>
 <html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta property="og:title" content="">
+        <meta property="og:type" content="">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+
+        <link rel="manifest" href="site.webmanifest">
+        <link rel="apple-touch-icon" href="icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" href="main.css">
+
+        <meta name="theme-color" content="#fafafa">
+    </head>
     <body>
-        <form method="POST" action='chosenLeague.php'> 
-            <div class="custom-select" style="width:200px;">
-                <select id="leagueName" name="leagueName" onchange="this.form.submit()">
-                    <option value="0">Select League to View:</option>
-                    <?php 
+    <!-- Add your site or application content here -->
+    <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="main.js"></script>
+
+
+    <!-- Load an icon library to show a hamburger menu (bars) on small screens -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!--menu & css from w3schools: https://www.w3schools.com/howto/howto_js_topnav_responsive.asp-->
+    <div class="topnav" id="myTopnav">
+        <a href="chooseleague.php">Home</a>
+        <a href="logout.php" style="float: right">Log Out</a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+
+
+    <div class="card">
+        <div class="container">
+            <h2><?php 
+                    echo "Hello, $firstname $lastname";
+                    echo "<br>Your username: $username";
+                    echo "<hr>";
+                ?>
+                </h2>
+                <?php
+                        echo "<h3>Leagues you are a part of: </h3>";
                         foreach ($leagues as $league){
-                            echo "<option id='chosenLeagueName' name='chosenLeagueName' value='$league'>League $league</option>";
+                            echo "<li>League $league<br>";
                         }
                     ?>
-                </select>
+
+                    <form method="POST" action='chosenLeague.php'> 
+                        <div class="custom-select" style="width:200px;">
+                            <select id="leagueName" name="leagueName" onchange="this.form.submit()">
+                                <option value="0">Select League to View:</option>
+                                <?php 
+                                    foreach ($leagues as $league){
+                                        echo "<option id='chosenLeagueName' name='chosenLeagueName' value='$league'>League $league</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </form>
+        </div>
+    </div>
+                
+    <br>
+            
+    <div class="card">
+        <div class="container">
+            <div class="col-container">
+                <div class="col">
+                    <h3>Create a League!</h3>
+                    <form action="createleague.php" id="createLeagueForm" method="post">
+                        Give your league a name: <br><input type=text name="leagueName" id="leagueName" required placeholder="Enter league name"><br>
+                        
+                        <h4 style="margin-bottom: 0px">Add your friends!</h4><p style="margin-top: 0px">*Up to 10 members</p>
+                        
+                        Member 1: <br><input type=text name="leagueMember1" id = "leagueMember1" required><br>
+                        <p></p>
+                        Member 2: <br><input type=text name="leagueMember2" id="leagueMember2"><br>
+                        <p></p>
+                        Member 3: <br><input type=text name="leagueMember3" id="leagueMember3"><br>
+                        <p></p>
+                        Member 4: <br><input type=text name="leagueMember4" id="leagueMember4"><br>
+                        <p></p>
+                        Member 5: <br><input type=text name="leagueMember5" id="leagueMember5"><br>
+                        <p></p>
+                        Member 6: <br><input type=text name="leagueMember6" id="leagueMember6"><br>
+                        <p></p>
+                        Member 7: <br><input type=text name="leagueMember7" id="leagueMember7"><br>
+                        <p></p>
+                        Member 8: <br><input type=text name="leagueMember8" id="leagueMember8"><br>
+                        <p></p>
+                        Member 9: <br><input type=text name="leagueMember9" id="leagueMember9"><br>
+                        <p></p>
+                        Member 10: <br><input type=text name="leagueMember10" id="leagueMember10"><br>
+                        <p></p>
+
+                        <input type=submit id = "createLeague" onclick="createdLeagueAlert()" >
+                        <input type="reset" value="Cancel">
+                    </form>
+
+
+
+                </div>
+                <div class="col form">
+                    <h3>Friends List:</h3>
+
+                    <hr>
+
+                    <h3>Manage your Friends List</h3>
+
+                    <form id="friendship" method="post" action="addfriend.php">
+                        Enter Username: <input type=text name="friendUsername" id="friendusername" required>
+                        <input type=submit id = "addFriend" name = "addFriend" value = "Send Friend Request">
+                    </form>
+                                    <br>
+                    <form id="friendship" method="post" action="deletefriend.php">
+                        Enter Username: <input type=text name="friendUsername" id="friendusername" required>
+                        <input type=submit id = "addFriend" name = "addFriend" value = "Delete Friend">
+                    </form>
+                    
+                </div>
             </div>
-        </form>
+
+
+        </div>
+    </div>
     </body>
 </html>

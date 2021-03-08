@@ -54,6 +54,7 @@ $leagueName = $_SESSION["leagueName"];
 
   <!--menu & css from w3schools: https://www.w3schools.com/howto/howto_js_topnav_responsive.asp-->
   <div class="topnav" id="myTopnav">
+    <a href="chooseleague.php">Home</a>
     <a href="myteam.php">My Team</a>
     <a href="league.php">League</a>
     <a href="players.php" class="active">Players</a>
