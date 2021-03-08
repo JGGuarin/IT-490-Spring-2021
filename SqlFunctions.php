@@ -1,17 +1,45 @@
 <?php
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
 
 //ADD Player
-function playerAdd ($name) {
-    "UPDATE `Player` "
+//TODO: If loop to check if maximum roster limit will be broken
+function playerAdd ($teamID, $playername) {
+  global $db, $t;
+
+  $s = "UPDATE Player SET TeamID='$teamID' WHERE FullName='$playername'";
+
+  ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+  $num = mysqli_num_rows($t);
 }
 
 //DROP Player
+//TODO: If loop to check if minimum roster limit will be broken
+//TODO: Update the team names
+function playerDrop ($teamID, $names) {
+  
+  $s = "UPDATE Player SET TeamID=0 WHERE TeamID='$teamID' AND FullName='$names'";
 
-//Player Averages
+  ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+  $num = mysqli_num_rows($t);
+}
 
-//Show the teams for a league
+//TODO Player Averages
 
 //Insert a statline
+function addStatline ($PlayerID, $Points, $Assists, $Rebounds, $Steals, $Blocks, $FgPercent, $TptPercent, $FtPercent) {
+  global $db, $t;
+
+  $s = "INSERT INTO BBStatLine(PlayerID, Point, Assists, Rebounds, Steals, Blocks, FgPercent, TptPercent, FtPercent) VALUES ($PlayerID, $Points, $Assists, $Rebounds, $Steals, $Blocks, $FgPercent, $TptPercent)";
+
+  ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+  $num = mysqli_num_rows($t);
+}
+
+//TODO: Write the return from the schedule call
+function scheduleWrite($ApiGameId, $HomeTeam, $AwayTeam){
+  
+}
 
 //The Following Functions are related to the friend system
  // SEND FRIEND REQUEST
