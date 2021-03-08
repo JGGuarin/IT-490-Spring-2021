@@ -13,6 +13,7 @@ function doLogin($username,$password)
     //return false if not valid
 }
 
+
 function requestProcessor($request)
 {
   echo "received request".PHP_EOL;
@@ -33,6 +34,7 @@ function requestProcessor($request)
 
 $logger = new CentralizedLogger();
 $logger->log("Test log.");
+
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
 
 echo "testRabbitMQServer BEGIN".PHP_EOL;

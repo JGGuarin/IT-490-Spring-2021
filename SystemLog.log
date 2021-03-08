@@ -1,56 +1,24 @@
 
-LOGGING HAS BEGUN (at Sun, 07 Mar 2021 18:36:17 -0500)
+LOGGING HAS BEGUN (at Sun, 07 Mar 2021 19:57:18 -0500)
 ************************************************************
-/home/jayguarz/git/rabbitmqphp_example/testRabbitMQServerLogger.php on line 35: Test log.
+/home/jayguarz/git/rabbitmqphp_example/testRabbitMQServerLogger.php on line 36: "Test log."
 
 
-LOGGING HAS BEGUN (at Sun, 07 Mar 2021 18:37:15 -0500)
-************************************************************
-/home/jayguarz/git/rabbitmqphp_example/testRabbitMQServerLogger.php on line 35: Test log.
-
-
-LOGGING HAS BEGUN (at Sun, 07 Mar 2021 18:44:04 -0500)
-************************************************************
-/home/jayguarz/git/rabbitmqphp_example/testRabbitMQServerLogger.php on line 36: Test log.
-
-
-LOGGING HAS BEGUN (at Sun, 07 Mar 2021 18:45:27 -0500)
-************************************************************
-/home/jayguarz/git/rabbitmqphp_example/testRabbitMQServerLogger.php on line 36: Test log.
-
-
-LOGGING HAS BEGUN (at Sun, 07 Mar 2021 18:47:43 -0500)
-************************************************************
-/home/jayguarz/git/rabbitmqphp_example/testRabbitMQServerLogger.php on line 35: Test log.
-
-
-LOGGING HAS BEGUN (at Sun, 07 Mar 2021 18:47:46 -0500)
-************************************************************
-/home/jayguarz/git/rabbitmqphp_example/testRabbitMQClient.php on line 27: Array
-
-************************************************************
-LOGGING HAS ENDED (at Sun, 07 Mar 2021 18:47:46 -0500)
-
-LOGGING HAS BEGUN (at Sun, 07 Mar 2021 18:50:23 -0500)
-************************************************************
-/home/jayguarz/git/rabbitmqphp_example/testRabbitMQServerLogger.php on line 35: "Test log."
-
-
-LOGGING HAS BEGUN (at Sun, 07 Mar 2021 18:50:28 -0500)
+LOGGING HAS BEGUN (at Sun, 07 Mar 2021 19:57:35 -0500)
 ************************************************************
 /home/jayguarz/git/rabbitmqphp_example/testRabbitMQClient.php on line 27: {"type":"Login","username":"steve","password":"password","message":"test message"}
 
 ************************************************************
-LOGGING HAS ENDED (at Sun, 07 Mar 2021 18:50:28 -0500)
+LOGGING HAS ENDED (at Sun, 07 Mar 2021 19:57:35 -0500)
 
-LOGGING HAS BEGUN (at Sun, 07 Mar 2021 18:55:23 -0500)
+LOGGING HAS BEGUN (at Sun, 07 Mar 2021 19:58:22 -0500)
 ************************************************************
-/home/jayguarz/git/rabbitmqphp_example/testRabbitMQServerLogger.php on line 35: "Test log."
+/home/jayguarz/git/rabbitmqphp_example/testRabbitMQServerLogger.php on line 36: "Test log."
 
 
-LOGGING HAS BEGUN (at Sun, 07 Mar 2021 18:55:25 -0500)
+LOGGING HAS BEGUN (at Sun, 07 Mar 2021 19:58:25 -0500)
 ************************************************************
 /home/jayguarz/git/rabbitmqphp_example/testRabbitMQClient.php on line 27: {"type":"Login","username":"steve","password":"password","message":"test message"}
 
 ************************************************************
-LOGGING HAS ENDED (at Sun, 07 Mar 2021 18:55:25 -0500)
+LOGGING HAS ENDED (at Sun, 07 Mar 2021 19:58:25 -0500)
