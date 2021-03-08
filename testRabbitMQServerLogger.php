@@ -3,17 +3,11 @@
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
-require_once('logger.php'); // Oh boy new thing
-
-
-$logger = new CentralizedLogger(); // CALLING AND CREATING THE LOGGER
-set_error_handler(array($logger, 'errorLog'));
-// CHANGE THE ERROR HANDLER
-
+require_once('logger.php'); // "Importing" logger.php
 
 function doLogin($username,$password)
 {
-    // lookup username in database
+    // lookup username in databas
     // check password
     return true;
     //return false if not valid
@@ -37,6 +31,8 @@ function requestProcessor($request)
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
 
+$logger = new CentralizedLogger();
+$logger->log("Test log.");
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
 
 echo "testRabbitMQServer BEGIN".PHP_EOL;

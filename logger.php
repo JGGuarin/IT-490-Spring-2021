@@ -2,66 +2,46 @@
 <?php
 require_once('rabbitMQLib.inc');
 
-// Will be used for a centralized logger
+// A logger class as defined for midterm specifications
 class CentralizedLogger
 {
     public $logFile;
 
-    // Automatically called when creating an object from a class
+    // Automatically called when creating this class object
     function __construct()
     {
         $logFileName = "SystemLog.log";
+        echo "LOGGING DATA TO '".$logFileName."'".PHP_EOL;
 
-        // Creates the log file if it doesn't exist and appends to it
         $this->logFile = fopen($logFileName, "a");
-        echo "centralizedLogger BEGIN".PHP_EOL;
-        
         fwrite($this->logFile, PHP_EOL);
-        fwrite($this->logFile, "centralizedLogger BEGIN (at ".date(DATE_RFC2822).")".PHP_EOL);  
-        fwrite($this->logFile, "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV".PHP_EOL);  
-        
-        $logServer = new rabbitMQClient("testRabbitMQ.ini","loggerServer");
-        // $logServer->process_requests(array($this, 'requestProcessor'));
+        fwrite($this->logFile, "LOGGING HAS BEGUN (at ".date(DATE_RFC2822).")".PHP_EOL);
+        fwrite($this->logFile, "************************************************************".PHP_EOL);
+
+        //$eeg = new rabbitMQClient("testRabbitMQ.ini", "loggerServer");
     }
 
-    function requestProcessor($requestData)
+    function log($data)
     {
-        echo "received request".PHP_EOL;
-        print_r($requestData);
-        fwrite($this->logFile, $requestData);
+        // Referencing the first and only array entry of an array
+        $backTrace = debug_backtrace()[0];
+
+        $filePath = $backTrace['file'];
+        $lineNumber = $backTrace['line'];
+
+        //json_encode($data) can handle arrays
+        $log = $filePath." on line ".$lineNumber.": ".json_encode($data).PHP_EOL; 
+        fwrite($this->logFile, $log.PHP_EOL);
     }
 
-    function errorLog($errno, $errstr, $errfile, $errline)
-    {
-        $errorMsg = "Error Number: ".$errorno.": ".$errfile.": ".$errline.": ".$errstr.PHP_EOL;
-        fwrite($this->logFile, $errorMsg);
-    }
-
+    // Automatically called when this class object is destructed or
+    // the script is stopped or exited
     function __destruct()
     {
-        fwrite($logFile, "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^".PHP_EOL); 
-        write($logFile, "centralizedLogger END (at ".date(DATE_RFC2822).")".PHP_EOL); 
-        fclose($logFile);
+        fwrite($this->logFile, "************************************************************".PHP_EOL);
+        fwrite($this->logFile, "LOGGING HAS ENDED (at ".date(DATE_RFC2822).")".PHP_EOL);
+        fclose($this->logFile);
     }
 }
 
-// Will be used for a distributed logger
-class LoggerServer
-{
-    // Automatically called when creating an object from a class
-    function __construct()
-    {
-
-    }
-}
-
-// Will be used for a distributed logger
-class LoggerClient
-{
-    // Automatically called when creating an object from a class
-    function __construct()
-    {
-
-    }
-}
 ?>
