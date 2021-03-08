@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
 
 function get($fieldname, &$dataOK){
     global $db, $warnings;
@@ -47,10 +49,10 @@ function getUserId($username, $password){
     return $userID;
 }
 
-function getTeamId($userID){
+function getTeamID($userID, $leagueID){
     global $db, $t;
 
-    $s = "select TeamID from Team where UserID='$userID'";
+    $s = "select TeamID from Team where UserID='$userID' and LeagueID = '$leagueID'";
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
 
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
@@ -60,10 +62,42 @@ function getTeamId($userID){
     return $teamID;
 }
 
-function getLeagueId($userID){
+function getTeamName($teamID){
     global $db, $t;
 
-    $s = "select LeagueID from Team where UserID='$userID'";
+    $s = "select TeamName from Team where TeamID = '$teamID'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+
+    $teamName = $r['TeamName'];
+    
+    return $teamName;
+
+}
+
+function getLeagueMemberTeamName($Username, $leagueID){
+    global $db, $t;
+
+    $s = "select UserID from Users where Username = '$Username'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+
+    $userID = $r['UserID'];
+
+    $teamID = getTeamID($userID, $leagueID);
+
+    $teamName = getTeamName($teamID);
+
+    return $teamName;
+
+}
+
+function getLeagueID($leagueName){
+    global $db, $t;
+
+    $s = "select LeagueID from League where LeagueName='$leagueName'";
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
 
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
@@ -216,24 +250,6 @@ function displayPlayersTeams(){
     return $teams;
 }
 
-function displayPlayersFTs(){
-    global $db, $t;
-
-    $s = "SELECT Ft FROM PlayerImport";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
-    $num = mysqli_num_rows($t);
-
-    $fts = array();
-
-    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
-        $ft = $r["Ft"];
-       
-        array_push($fts, $ft);
-
-    }
-    return $fts;
-}
-
 function displayPlayersInfo($stat){
     global $db, $t;
 
@@ -255,7 +271,7 @@ function displayPlayersInfo($stat){
 function displayAvailability($playerName){
     global $db, $t;
 
-    $s = "select * from Player where FullName = '$PlayerName'";
+    $s = "select * from Player where FullName = '$playerName'";
 
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
     $num = mysqli_num_rows($t);
@@ -270,5 +286,76 @@ function displayAvailability($playerName){
     
     return "On Roster";
 }
+
+function displayTeamPlayersNames($teamID){
+    global $db, $t;
+
+    $s = "SELECT * FROM Player where TeamID = '$teamID'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
+
+    $fullnames = array();
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $fullname = $r["FullName"];
+        array_push($fullnames, $fullname);
+    }
+
+
+    return $fullnames;
+}
+
+function displayTeamPlayersInfo($infoNeeded, $fullName){
+    global $db, $t;
+
+    $s = "SELECT $infoNeeded FROM PlayerImport where FullName = '$fullName'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
+
+    $infoNeededArr = array();
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $info = $r["$infoNeeded"];
+        array_push($infoNeededArr, $info);
+    }
+
+
+    return $infoNeededArr;
+}
+
+function displayLeagueMembers($leagueID){
+    global $db, $t;
+
+
+    $s = "SELECT * FROM Team where LeagueID = '$leagueID'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
+
+
+    $userIDs = array();
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $userID = $r["UserID"];
+        array_push($userIDs, $userID);
+    }
+
+    $usernames = array();
+    foreach ($userIDs as $userID){
+        $s = "SELECT Username FROM Users where UserID = '$userID'";
+        ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+        $num = mysqli_num_rows($t);
+
+
+        while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+            $username = $r["Username"];
+            array_push($usernames, $username);
+        }
+    }
+
+    return $usernames;
+
+}
+
+
+
+
+
 
 ?>

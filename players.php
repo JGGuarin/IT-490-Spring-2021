@@ -128,9 +128,8 @@ $leagueName = $_SESSION["leagueName"];
           <th scope="col">BLK</th>
           <th scope="col">PTS</th>
         </tr>
-        </tr>
             <?php 
-                $name = displayPlayersNames();
+                $names = displayPlayersNames();
                 $positions = displayPlayersPositions();
                 $teams = displayPlayersTeams();
                 $ft = displayPlayersInfo("Ft");
@@ -142,10 +141,10 @@ $leagueName = $_SESSION["leagueName"];
                 $spg = displayPlayersInfo("Spg");
                 $bpg = displayPlayersInfo("Bpg");
 
-                for ($i=0; $i < count($name); $i++){
+                for ($i=0; $i < count($names); $i++){
                   echo "<tr>";
                   echo "<td>";
-                  echo $name[$i];
+                  echo $names[$i];
                   echo "<p class='position'>";
                   echo $positions[$i];
                   echo "</p>";
@@ -155,7 +154,7 @@ $leagueName = $_SESSION["leagueName"];
                   echo "</td>";
                   echo "<td>";
                   echo "<p class='availability'>";
-                  echo displayAvailability($name[$i]);
+                  echo displayAvailability($names[$i]);
                   echo "</p>";
                   echo "</td>";
                   echo "<td>";

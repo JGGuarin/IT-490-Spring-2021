@@ -8,7 +8,17 @@ $password = $_SESSION["password"];
 $userID = $_SESSION["userID"];
 $firstname = $_SESSION["firstname"];
 $lastname = $_SESSION["lastname"];
-$_SESSION["leagueName"] = $_POST["leagueName"];
+
+$leagueName = $_POST["leagueName"];
+$leagueID = getLeagueID($leagueName);
+
+$teamID = getTeamID($userID, $leagueID);
+$teamName = getTeamName($teamID);
+
+$_SESSION["teamID"] = $teamID;
+$_SESSION["leagueName"] = $leagueName;
+$_SESSION["leagueID"] = $leagueID;
+$_SESSION["teamName"] = $teamName;
 
 if (! $_SESSION["logged"]){
     header("Location: login.html");

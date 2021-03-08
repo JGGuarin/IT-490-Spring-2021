@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'ini.php';
+include 'mainfunctions.php';
 
 if (! $_SESSION["logged"]){
   header("Location: login.html");
@@ -10,6 +11,7 @@ if (! $_SESSION["logged"]){
 $username = $_SESSION["username"];
 $password = $_SESSION["password"];
 $userID = $_SESSION["userID"];
+$teamName = $_SESSION["teamName"];
 $teamID = $_SESSION["teamID"];
 $leagueID = $_SESSION["leagueID"];
 $firstname = $_SESSION["firstname"];
@@ -71,7 +73,7 @@ $leagueName = $_SESSION["leagueName"];
           <img src="jersey%20logo.jpg" height=100px width=100px />
         </div>
         <div class="column right">
-          <h4><b>Team Name</b></h4>
+          <h4><b><?php echo $teamName ?></b></h4>
           <p> <?php echo $leagueName ?> | <?php echo $username ?></p>
         </div>
       </div>
@@ -95,7 +97,6 @@ $leagueName = $_SESSION["leagueName"];
         <tr>
           <th scope="col">Slot</th>
           <th scope="col">Player</th>
-          <th scope="col">FGM</th>
           <th scope="col">FG%</th>
           <th scope="col">FT%</th>
           <th scope="col">3PM</th>
@@ -105,12 +106,61 @@ $leagueName = $_SESSION["leagueName"];
           <th scope="col">BLK</th>
           <th scope="col">PTS</th>
         </tr>
-        <tr>
-          <td>postion</td>
-          <td>playerName</td>
-        </tr>
-        <tr>
-        </tr>
+          <?php 
+            $names = displayTeamPlayersNames($teamID);
+           
+
+            for ($i=0; $i < count($names); $i++){
+              $positions = displayTeamPlayersInfo('Pos',$names[$i]);
+              $teams = displayTeamPlayersInfo('Team',$names[$i]);
+              $ft = displayTeamPlayersInfo('Ft',$names[$i]);
+              $tp = displayTeamPlayersInfo('Tp',$names[$i]);
+              $fg = displayTeamPlayersInfo('Fg',$names[$i]);
+              $ppg = displayTeamPlayersInfo('Ppg',$names[$i]);
+              $rpg = displayTeamPlayersInfo('Rpg',$names[$i]);
+              $apg = displayTeamPlayersInfo('Apg',$names[$i]);
+              $spg = displayTeamPlayersInfo('Spg',$names[$i]);
+              $bpg = displayTeamPlayersInfo('Bpg',$names[$i]);
+
+              echo "<tr>";
+              echo "<td>";
+              echo $positions[$i];
+              echo "</td>";
+              echo "<td>";
+              echo $names[$i];
+              echo "<p class='proTeam'>";
+              echo $teams[$i];
+              echo "</p>";
+              echo "</td>";
+              echo "<td>";
+              echo $fg[$i];
+              echo "</td>";
+              echo "<td>";
+              echo $ft[$i];
+              echo "</td>";
+              echo "<td>";
+              echo $tp[$i];
+              echo "</td>";
+              echo "<td>";
+              echo $rpg[$i];
+              echo "</td>";
+              echo "<td>";
+              echo $apg[$i];
+              echo "</td>";
+              echo "<td>";
+              echo $spg[$i];
+              echo "</td>";
+              echo "<td>";
+              echo $bpg[$i];
+              echo "</td>";
+              echo "<td>";
+              echo $ppg[$i];
+              echo "</td>";
+              echo "</tr>";
+
+            }                
+
+          ?>     
       </table>
     </div>
   </div>

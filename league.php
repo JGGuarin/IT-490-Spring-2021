@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'ini.php';
+include 'mainfunctions.php';
 
 if (! $_SESSION["logged"]){
   header("Location: login.html");
@@ -10,7 +11,7 @@ if (! $_SESSION["logged"]){
 $username = $_SESSION["username"];
 $password = $_SESSION["password"];
 $userID = $_SESSION["userID"];
-$teamID = $_SESSION["teamID"];
+$teamName = $_SESSION["teamName"];
 $leagueID = $_SESSION["leagueID"];
 $firstname = $_SESSION["firstname"];
 $lastname = $_SESSION["lastname"];
@@ -71,7 +72,7 @@ $leagueName = $_SESSION["leagueName"];
         <div class="column left">
             <h2>My Team</h2>
           <img src="jersey%20logo.jpg" height=100px width=100px />
-          <h3>Team Name</h3>
+          <h3><?php echo $teamName ?></h3>
           <?php echo $username?><br>
           <a href="myteam.php">View roster</a>
 
@@ -80,9 +81,15 @@ $leagueName = $_SESSION["leagueName"];
           <h2><b><?php echo $leagueName?></b></h2>
           <hr>
           <h4><b>League Members</b></h4>
-          <p>Username | Team Name</p>
-          <p>Username | Team Name</p>
-          <p>Username | Team Name</p>
+          
+            <?php 
+                $leagueMembers = displayLeagueMembers($leagueID);
+                
+                foreach ($leagueMembers as $leagueMember){
+                  echo "<b>User: </b>" . $leagueMember . " | <b>Team: </b>" . getLeagueMemberTeamName($leagueMember, $leagueID) . "<br>";
+                }
+            
+            ?>
         </div>
       </div>
     </div>
