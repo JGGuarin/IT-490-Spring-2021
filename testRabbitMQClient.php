@@ -23,7 +23,7 @@ $request['message'] = $msg;
 $response = $client->send_request($request);
 //$response = $client->publish($request);
 
-$logger = new CentralizedLogger(); // LOGGY
+$logger = new LoggerClient(); // LOGGY
 $logger->log($request); // MORE LOGGY
 
 echo "client received response: ".PHP_EOL;

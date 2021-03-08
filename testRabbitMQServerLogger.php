@@ -32,7 +32,7 @@ function requestProcessor($request)
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
 
-$logger = new CentralizedLogger();
+$logger = new LoggerServer();
 $logger->log("Test log.");
 
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
