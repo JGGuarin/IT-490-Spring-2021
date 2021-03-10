@@ -107,6 +107,25 @@ function getLeagueID($leagueName){
     return $leagueID;
 }
 
+function getTeamScores($teamName, $leagueID){
+    global $db, $t;
+
+    $s = "select * from Team where TeamName='$teamName' and LeagueID = '$leagueID'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+    $scores = array();
+    while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $wins = $r['Wins'];
+        $losses = $r['Losses'];
+        $ties = $r['Ties'];
+
+        array_push($scores, $wins, $losses, $ties);
+    }
+
+
+    return $scores;
+}
+
 function getFirstName($userID){
     global $db, $t;
 
@@ -278,9 +297,14 @@ function displayAvailability($playerName){
     if ($num == 0){
         return "Available";
     }
-    
-    //access content of row in $t
-    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $teamID = $r['TeamID'];
+    }
+
+    if ($teamID == 0){
+        return "Available";
+    }
     
     return "On Roster";
 }
@@ -309,14 +333,19 @@ function displayTeamPlayersInfo($infoNeeded, $fullName){
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
     $num = mysqli_num_rows($t);
 
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+    $info = $r[$infoNeeded];
+
+    /*
     $infoNeededArr = array();
     while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
         $info = $r["$infoNeeded"];
         array_push($infoNeededArr, $info);
     }
 
-
-    return $infoNeededArr;
+    // print_r($infoNeededArr);
+*/
+    return $info;
 }
 
 function displayLeagueMembers($leagueID){
@@ -330,6 +359,37 @@ function displayLeagueMembers($leagueID){
     $userIDs = array();
     while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
         $userID = $r["UserID"];
+        array_push($userIDs, $userID);
+    }
+
+    $usernames = array();
+    foreach ($userIDs as $userID){
+        $s = "SELECT Username FROM Users where UserID = '$userID'";
+        ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+        $num = mysqli_num_rows($t);
+
+
+        while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+            $username = $r["Username"];
+            array_push($usernames, $username);
+        }
+    }
+
+    return $usernames;
+
+}
+
+function displayTeamsInLeague($leagueID){
+    global $db, $t;
+
+    $s = "SELECT * FROM Team where LeagueID = '$leagueID'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
+
+
+    $teams = array();
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $team = $r["UserID"];
         array_push($userIDs, $userID);
     }
 
@@ -382,10 +442,61 @@ function createALeauge($leagueName, $userID, $username, $memberArray){
     return $leagueID;
 }
 
-function addAFriend($userID, $friendUsername){
+function isPlayerOnTeam($teamID, $playerName){
+    global $db, $t;
 
+    $s = "select * from Player where TeamID = '$teamID'";
+
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
+
+    //if no rows are returned, the player is not on their team
+    if ($num == 0){return false;}
+
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $teamID = $r['TeamID'];
+    }
+
+    if ($teamID == 0){
+        return false;
+    }
+    
+    return true;
 }
 
+//ADD Player
+//TODO: If loop to check if maximum roster limit will be broken
+function playerAdd ($teamID, $playerName) {
+    global $db, $t;
+  
+    $playername = sanitizeInput($playerName);
+    $s = "UPDATE Player SET TeamID='$teamID' WHERE FullName='$playername'";
+  
+    ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+    //$num = mysqli_num_rows($t);
+}
+ 
 
+//DROP Player
+//TODO: If loop to check if minimum roster limit will be broken
+//TODO: Update the team names
+function playerDrop ($teamID, $playerName) {
+    global $db, $t;
+
+    $playerName = sanitizeInput($playerName);
+    $s = "UPDATE Player SET TeamID=0 WHERE TeamID='$teamID' AND FullName='$playerName'";
+
+    ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+    //$num = mysqli_num_rows($t);
+}
+
+function sanitizeInput($fieldname){
+    global $db, $warnings;
+
+    $v = trim($fieldname);
+    $v = mysqli_real_escape_string($db, $v);
+
+    return $v;
+}
 
 ?>

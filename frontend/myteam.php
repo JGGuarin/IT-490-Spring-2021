@@ -109,10 +109,10 @@ $leagueName = $_SESSION["leagueName"];
         </tr>
           <?php 
             $names = displayTeamPlayersNames($teamID);
-           
 
             for ($i=0; $i < count($names); $i++){
-              $positions = displayTeamPlayersInfo('Pos',$names[$i]);
+
+              $positions = displayTeamPlayersInfo('Pos', $names[$i]);
               $teams = displayTeamPlayersInfo('Team',$names[$i]);
               $ft = displayTeamPlayersInfo('Ft',$names[$i]);
               $tp = displayTeamPlayersInfo('Tp',$names[$i]);
@@ -125,39 +125,40 @@ $leagueName = $_SESSION["leagueName"];
 
               echo "<tr>";
               echo "<td>";
-              echo $positions[$i];
+              echo $positions;
               echo "</td>";
               echo "<td>";
               echo $names[$i];
               echo "<p class='proTeam'>";
-              echo $teams[$i];
+              echo $teams;
               echo "</p>";
               echo "</td>";
               echo "<td>";
-              echo $fg[$i];
+              echo $fg;
               echo "</td>";
               echo "<td>";
-              echo $ft[$i];
+              echo $ft;
               echo "</td>";
               echo "<td>";
-              echo $tp[$i];
+              echo $tp;
               echo "</td>";
               echo "<td>";
-              echo $rpg[$i];
+              echo $rpg;
               echo "</td>";
               echo "<td>";
-              echo $apg[$i];
+              echo $apg;
               echo "</td>";
               echo "<td>";
-              echo $spg[$i];
+              echo $spg;
               echo "</td>";
               echo "<td>";
-              echo $bpg[$i];
+              echo $bpg;
               echo "</td>";
               echo "<td>";
-              echo $ppg[$i];
+              echo $ppg;
               echo "</td>";
               echo "</tr>";
+              
 
             }                
 

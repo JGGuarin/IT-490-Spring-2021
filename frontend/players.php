@@ -17,6 +17,8 @@ $firstname = $_SESSION["firstname"];
 $lastname = $_SESSION["lastname"];
 $leagueName = $_SESSION["leagueName"];
 
+
+
 ?>
 
 <!doctype html>
@@ -143,19 +145,33 @@ $leagueName = $_SESSION["leagueName"];
                 $bpg = displayPlayersInfo("Bpg");
 
                 for ($i=0; $i < count($names); $i++){
-                  echo "<tr>";
-                  echo "<td>";
-                  echo $names[$i];
-                  echo "<p class='position'>";
-                  echo $positions[$i];
+                  $availability = displayAvailability($names[$i]);
+                  echo "<tr>
+                            <td>
+                                <p name='playerName' id='playerNameToAdd'> $names[$i]<p>
+                                <p class='position'> $positions[$i] </p>
+                                <p class='proTeam'> $teams[$i] </p>";
+                  
+                  echo "<p>";
+                  if ($availability == "Available"){
+                    
+                    echo "<a href='addPlayers.php?playerName=" . $names[$i] . "'><button type='button' name='addPlayer'>Add Player</button></a>
+                              </td>";
+                  }elseif (isPlayerOnTeam($teamID, $names[$i])){
+                    echo "<a href='dropPlayers.php?playerName=" . $names[$i] . "'><button type='button' name='droplayer'>Drop Player</button></a>
+                              </td>";
+                  }
+                  else{
+                    echo "Player not available";
+                  }
                   echo "</p>";
-                  echo "<p class='proTeam'>";
-                  echo $teams[$i];
-                  echo "</p>";
+
+
+          
                   echo "</td>";
                   echo "<td>";
                   echo "<p class='availability'>";
-                  echo displayAvailability($names[$i]);
+                  echo $availability;
                   echo "</p>";
                   echo "</td>";
                   echo "<td>";

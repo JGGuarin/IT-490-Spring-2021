@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'ini.php';
+include 'mainfunctions.php';
 
 if (! $_SESSION["logged"]){
   header("Location: login.html");
@@ -70,21 +71,18 @@ $leagueName = $_SESSION["leagueName"];
   <div class="card">
     <div class="container">
       <h2>Team Scores</h2>
-      <table class="no-border" width=50%>
-        <tr class="no-border">
-          <th>Team 1</th>
-          <th>Wins - Losses - Ties</th>
-        </tr>
-        <tr class="no-border">
-          <th>Team 2</th>
-          <th>Wins - Losses - Ties</th>
-        </tr>
-        <tr class="no-border">
-          <th>Team 3</th>
-          <th>Wins - Losses - Ties</th>
-        </tr>
-        <tr>
-        </tr>
+      <table class='no-border' width=50%>   
+          <th>Team</th> 
+          <th>Scores</th>      
+          <?php 
+            $leagueMembers = displayLeagueMembers($leagueID);
+            
+            foreach ($leagueMembers as $leagueMember){
+              $teamName = getLeagueMemberTeamName($leagueMember, $leagueID);
+              $teamScores = getTeamScores($teamName, $leagueID);
+              echo "<tr><td></b>" . $teamName . "</td><td> $teamScores[0] - $teamScores[1] - $teamScores[2]" ."<br></td></tr>";
+            }
+          ?>
       </table>
     </div>
   </div>
