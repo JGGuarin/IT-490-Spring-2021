@@ -43,7 +43,7 @@ $leagueID = createALeauge($leagueName, $userID, $username, $memberArray);
 $_SESSION["leaugeID"] = $leagueID;
 $_SESSION["leaugeName"] = $leagueName;
 
-
-header("Refresh: 0.001, url=chooseleague.php");
-
+if (!$leagueID){
+    header("Refresh: 0.001, url=chooseleague.php");
+}
 ?>

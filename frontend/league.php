@@ -81,6 +81,7 @@ $leagueName = $_SESSION["leagueName"];
         <div class="column right">
           <h2><b><?php echo $leagueName?></b></h2>
           <hr>
+          Creator: <?php $creatorUsername = getCreatorUsername($leagueID); ?>
           <h4><b>League Members</b></h4>
           
             <?php 
@@ -88,6 +89,13 @@ $leagueName = $_SESSION["leagueName"];
                 
                 foreach ($leagueMembers as $leagueMember){
                   echo "<b>User: </b>" . $leagueMember . " | <b>Team: </b>" . getLeagueMemberTeamName($leagueMember, $leagueID) . "<br>";
+                }
+
+                if ($username == $creatorUsername){
+                  echo "<form method='post' action = 'draft.php'> 
+                            <input type='submit' name='draftButton'
+                                class='button' value='Set Draft'/> 
+                       </form> ";
                 }
             ?>
         </div>

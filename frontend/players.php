@@ -148,7 +148,7 @@ $leagueName = $_SESSION["leagueName"];
                   $availability = displayAvailability($names[$i]);
                   echo "<tr>
                             <td>
-                                <p name='playerName' id='playerNameToAdd'> $names[$i]<p>
+                                <a href='player.php?playerName=" . $names[$i] . "'>$names[$i]</a>
                                 <p class='position'> $positions[$i] </p>
                                 <p class='proTeam'> $teams[$i] </p>";
                   
@@ -202,22 +202,7 @@ $leagueName = $_SESSION["leagueName"];
 
                 }                
             ?>
-          
-          <!--
-          <td class="availability" data-availability="availability">Available</td>
-          <td>number</td>
-          <td>number</td>
-          <td>number</td>
-          <td>number</td>
-          <td>number</td>
-          <td>number</td>
-          <td>number</td>
-          <td>number</td>
-          <td>number</td>
-            -->
-        
       </table>
-
     </div>
   </div>
 

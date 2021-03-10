@@ -216,6 +216,21 @@ function getUserLeagues($userID){
     return $leagueNames;
 }
 
+function getCreatorUsername($leagueID){
+    global $db, $t;
+
+    $s = "select CreatorName from League where LeagueID='$leagueID'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+
+    $creatorUsername = $r["CreatorName"];
+
+    echo $creatorUsername;
+
+    return $creatorUsername;
+}
+
 function displayPlayersNames(){
     global $db, $t;
 
