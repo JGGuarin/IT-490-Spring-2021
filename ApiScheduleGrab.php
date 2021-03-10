@@ -26,7 +26,7 @@ else
 $curl = curl_init();
 
 // set our url with curl_setopt()
-curl_setopt($curl, CURLOPT_URL, "http://api.sportradar.us/nba/trial/v7/en/games/2021/03/10/schedule.json?api_key=zj6an2w9yyafk9speye2espw");
+curl_setopt($curl, CURLOPT_URL, "http://api.sportradar.us/nba/trial/v7/en/games/2021/03/04/schedule.json?api_key=zj6an2w9yyafk9speye2espw");
 
 // return the transfer as a string, also with setopt()
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -49,30 +49,16 @@ $homeNames = [];
 $awayNames = [];
 $combo = [];
 
-$var = 0;
-$var2 = 0;
-$var3 = 0;
-$var4 = 0;
-$var5 = 0;
-$var6 = 0;
-$var7 = 0;
-
 for ($i = 0; $i < count($phpArray['games']); $i++) {
-	$gameID[$var] = $phpArray['games'][$var2]['id'];
-	$var++;
-	$var2++;
+	$gameID[$i] = $phpArray['games'][$i]['id'];
 }
 
 for ($i = 0; $i < count($phpArray['games']); $i++) {
-        $homeNames[$var3] = $phpArray['games'][$var4]['home']['name'];
-        $var3++;
-        $var4++;
+        $homeNames[$i] = $phpArray['games'][$i]['home']['name'];
 }
 
 for ($i = 0; $i < count($phpArray['games']); $i++) {
-        $awayNames[$var5] = $phpArray['games'][$var6]['away']['name'];
-        $var5++;
-        $var6++;
+        $awayNames[$i] = $phpArray['games'][$i]['away']['name'];
 }
 
 
