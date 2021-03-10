@@ -14,12 +14,12 @@ if (! $_SESSION["logged"]){
     exit();
 }
 
-
 $friendUsername = $_POST["friendUsername"];
 
-echo "friend: $friend";
+echo "friend: $friendUsername";
 
-addFriend($userID, $friendUsername);
+$msg = request($username, $friendUsername);
 
+header('Location: chooseleague.php');
 
 ?>

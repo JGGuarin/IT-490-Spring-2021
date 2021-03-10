@@ -499,4 +499,122 @@ function sanitizeInput($fieldname){
     return $v;
 }
 
+// SEND FRIEND REQUEST
+function request ($from, $to) {
+    //CHECK IF ALREADY FRIENDS
+    global $db, $t;
+
+    $from = sanitizeInput($from);
+    $to = sanitizeInput($to);
+
+    $s = "SELECT * FROM Relation WHERE `from`='$from' AND `to`='$to' AND `status`='F'";
+
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
+
+    if ($num == 0){
+        //RUN THE NEXT PART
+        $s =  "SELECT * FROM `relation` WHERE (`status`='P' AND `from`='$from' AND `to`='$to') OR (`status`='P' AND `from`='$to' AND `to`='$from')";
+
+        ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+        $num = mysqli_num_rows($t);
+
+        if ($num == 0){
+          $s = "INSERT INTO `relation` (`from`, `to`, `status`) VALUES ('$from','$to','P')";
+          ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+          return "Friend Request Sent";
+        }
+
+        return "Already has a pending friend request";
+    }
+    
+    return "Already Friends";
+
+  }
+
+  //ACCEPT FRIEND REQUEST
+  function acceptReq ($from, $to) {
+    global $db, $t;
+    //UPGRADE STATUS TO "F"RIENDS
+    $s = "UPDATE `relation` SET `status`='F' WHERE `status`='P' AND `from`='$from' AND `to`='$to'";
+
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+ 
+
+    //ADD RECIPOCAL RELATIONSHIP
+    $s = "INSERT INTO `relation` (`from`, `to`, `status`) VALUES ('$to','$from','F')";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    return "Friend Request Accepted";
+    
+  }
+
+  //NEEDS WORK: GET FRIEND REQUESTS
+  //TODO: Display the results
+  function getReq ($username) {
+    global $db, $t;
+
+    /*
+    //GET OUTGOING FRIEND REQUESTS (FROM USER TO OTHER PEOPLE)
+    $s = "SELECT * FROM `relation` WHERE `status`='P' AND `from`='$username'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+    */
+
+    //GET INCOMING FRIEND REQUESTS (FROM OTHER PEOPLE TO USER)
+    $s = "SELECT * FROM `relation` WHERE `status`='P' AND `to`='$username'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+    $num = mysqli_num_rows($t);
+    
+    //check to see if the user has any friends
+    if ($num == 0){
+      echo "No incoming friend requests yet";
+      return 0;
+    }else{
+    
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+
+    echo "Incoming friend request from: <b>" . $r["from"] . "</b>";  
+    
+    return $r["from"];
+    }
+  }
+
+  //NEEDS WORK: GET FRIENDS
+  //TODO: Display the results
+  function getFriends ($username) {
+    global $db, $t;
+    // GET FRIENDS
+    $s = "SELECT * FROM `relation` WHERE `status`='F' AND (`from`='$username' OR `to`='$username')";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+    $num = mysqli_num_rows($t);
+    
+    //check to see if the user has any friends
+    if ($num == 0){
+      echo "No friends yet";
+    }else{
+
+    $toUsernames = array();
+    $fromUsernames = array();
+    
+    while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $toUsername = $r["to"];
+        $fromUsername = $r["from"];
+
+        array_push($toUsernames, $toUsername);
+        array_push($fromUsernames, $fromUsername);
+
+    }
+
+    for ($i=0; $i < count($toUsernames) ; $i++){
+        if ($toUsernames[$i]== $username){
+            echo $fromUsernames[$i] . "<br>";
+        }
+    }
+    }
+  }
+
+
 ?>

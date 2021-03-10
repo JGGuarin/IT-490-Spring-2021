@@ -126,7 +126,7 @@ $leagues = getUserLeagues($userID);
                         Member 10: <br><input type=text name="leagueMember10" id="leagueMember10"><br>
                         <p></p>
 
-                        <input type=submit id = "createLeague" onclick="createdLeagueAlert()" >
+                        <input type=submit id = "createLeague">
                         <input type="reset" value="Cancel">
                     </form>
 
@@ -135,7 +135,22 @@ $leagues = getUserLeagues($userID);
                 </div>
                 <div class="col form">
                     <h3>Friends List:</h3>
+                        <?php getFriends($username); ?>
+                    <hr>
 
+                    <h3>Friend requests:</h3>
+                        <?php $friendUsername = getReq($username);
+
+                        if ($friendUsername !== 0){
+                            echo "<form method='post'> 
+                            <input type='submit' name='button1'
+                                class='button' value='Accept Request'/> 
+                            </form> ";
+                            if(array_key_exists('button1', $_POST)) { 
+                                acceptReq($friendUsername, $username); 
+                            }  
+                        }
+                        ?> 
                     <hr>
 
                     <h3>Manage your Friends List</h3>
@@ -144,12 +159,6 @@ $leagues = getUserLeagues($userID);
                         Enter Username: <input type=text name="friendUsername" id="friendusername" required>
                         <input type=submit id = "addFriend" name = "addFriend" value = "Send Friend Request">
                     </form>
-                                    <br>
-                    <form id="friendship" method="post" action="deletefriend.php">
-                        Enter Username: <input type=text name="friendUsername" id="friendusername" required>
-                        <input type=submit id = "addFriend" name = "addFriend" value = "Delete Friend">
-                    </form>
-                    
                 </div>
             </div>
 
