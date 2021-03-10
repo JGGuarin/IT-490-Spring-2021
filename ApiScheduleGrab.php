@@ -1,54 +1,32 @@
-  
 #!/usr/bin/php
 <?php
-require_once('path.inc');
-require_once('get_host_info.inc');
-require_once('rabbitMQLib.inc');
-require_once('logger.php');
 
 /////////////////
 // To Be Executed
 /////////////////
 
-$logger = new LoggerServer();
-$logger->log("Test log from that database script.");
-// Need to add change to logger.php so that it handles errors too
-
-// From testRabbitMQServer.php
-$server = new rabbitMQServer("testRabbitMQ.ini","testServer");
-echo "mysqlconnect BEGIN".PHP_EOL;
-
-$logger->log("mysqlconnect BEGIN".PHP_EOL);
-
 $hostName = 'localhost';
 $user = 'root';
-$password = 'RagingRabbits21';
+$password = '';
 $databaseName = 'FantasySports';
-$databaseConnection = new mysqli($hostName,$user,$password,$databaseName);  
+$db = new mysqli($hostName,$user,$password,$databaseName);  
 
-if ($databaseConnection->errno != 0)
+if ($db->errno != 0)
 {
-	echo "Failed to connect to database: ".$databaseConnection->error.PHP_EOL;
-	$logger->log("Failed to connect to database.".PHP_EOL);
+	echo "Failed to connect to database: ".$db->error.PHP_EOL;
 	exit(0);
 }
 else
 {
 	echo "Successfully connected to database".PHP_EOL;
-	$logger->log("Successfully connected to database.".PHP_EOL);
 }
-
-// From testRabbitMQServer.php
-$server->process_requests('requestProcessor');
-echo "mysqlconnect END".PHP_EOL;
-exit();
 
 
 // create & initialize a curl session
 $curl = curl_init();
 
 // set our url with curl_setopt()
-curl_setopt($curl, CURLOPT_URL, "http://api.sportradar.us/nba/trial/v7/en/games/2021/03/04/schedule.json?api_key=zj6an2w9yyafk9speye2espw");
+curl_setopt($curl, CURLOPT_URL, "http://api.sportradar.us/nba/trial/v7/en/games/2021/03/10/schedule.json?api_key=zj6an2w9yyafk9speye2espw");
 
 // return the transfer as a string, also with setopt()
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -101,14 +79,12 @@ for ($i = 0; $i < count($phpArray['games']); $i++) {
 function writeSchedule($gameID, $homeNames, $awayNames, $phpArray){
     global $db, $t;
     for ($i = 0; $i < count($phpArray['games']); $i++) {
-        $s = "INSERT INTO ApiGame (ApiGameId, HomeTeam, AwayTeam) VALUES ($gameID[$i], $homeNames[$i], $awayNames[$i])";
+	    $s = "INSERT INTO ApiGame (`ApiGameId`, `HomeTeam`, `AwayTeam`) VALUES ('$gameID[$i]', '$homeNames[$i]', '$awayNames[$i]')";
         ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
     }
 
 }
 
-print_r($gameID);
-print_r($homeNames);
-print_r($awayNames);
+writeSchedule($gameID, $homeNames, $awayNames, $phpArray)
 
 ?>
