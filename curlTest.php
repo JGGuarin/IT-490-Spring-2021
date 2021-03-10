@@ -58,12 +58,4 @@ print_r($gameID);
 print_r($homeNames);
 print_r($awayNames);
 
-//echo count($phpArray);
-
-$gameID1 = $phpArray['games'][0]['id'];
-$homeName1 = $phpArray['games'][0]['home']['name'];
-$awayName1 = $phpArray['games'][0]['away']['name'];
-
-
-
 ?>
