@@ -38,63 +38,92 @@ function addStatline ($PlayerID, $Points, $Assists, $Rebounds, $Steals, $Blocks,
 
 //TODO: Write the return from the schedule call
 function scheduleWrite($ApiGameId, $HomeTeam, $AwayTeam){
-  
+
 }
 
 //The Following Functions are related to the friend system
+//TODO: Fix the format
  // SEND FRIEND REQUEST
  function request ($from, $to) {
     //CHECK IF ALREADY FRIENDS
-    $this->query(
-      "SELECT * FROM `relation` WHERE `from`=? AND `to`=? AND `status`='F'",
-      [$from, $to]
-    );
-    $result = $this->stmt->fetch();
-    if (is_array($result)) {
-      $this->error = "Already added as friends";
-      return false;
-    }
+    global $db, $t
+    $s = "SELECT * FROM `relation` WHERE `from`=$from AND `to`=$to AND `status`='F'" ;
 
-    //CHECK FOR PENDING REQUESTS
-    $this->query(
-      "SELECT * FROM `relation` WHERE ".
-      "(`status`='P' AND `from`=? AND `to`=?) OR ".
-      "(`status`='P' AND `from`=? AND `to`=?)",
-      [$from, $to, $to, $from]
-    );
-    $result = $this->stmt->fetch();
-    if (is_array($result)) {
-      $this->error = "Already has a pending friend request";
-      return false;
-    }
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
 
-    //ADD FRIEND REQUEST
-    return $this->query(
-      "INSERT INTO `relation` (`from`, `to`, `status`) VALUES (?,?,'P')",
-      [$from, $to]
-    );
+    if ($num == 0){
+        //RUN THE NEXT PART
+        $s =  "SELECT * FROM `relation` WHERE (`status`='P' AND `from`=$from AND `to`=$to) OR (`status`='P' AND `from`=$to AND `to`=$from)";
+
+        ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+        $num = mysqli_num_rows($t);
+
+        if ($num == 0){
+          $s = "INSERT INTO `relation` (`from`, `to`, `status`) VALUES ($from,$to,'P')";
+          ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+          return "Friend Request Sent";
+        }
+
+        return "Already has a pending friend request";
+    }
+    
+    return "Already Friends";
+
   }
 
   //ACCEPT FRIEND REQUEST
   function acceptReq ($from, $to) {
+    global $db, $t
     //UPGRADE STATUS TO "F"RIENDS
-    $this->query(
-      "UPDATE `relation` SET `status`='F' WHERE `status`='P' AND `from`=? AND `to`=?",
-      [$from, $to]
-    );
-    if ($this->stmt->rowCount()==0) {
-      $this->error = "Invalid friend request";
-      return false;
+    $s = "UPDATE `relation` SET `status`='F' WHERE `status`='P' AND `from`=$from AND `to`=$to";
+
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
+    
+    //check to see if valid friend request
+    if ($num == 0){
+      return "Invalid Friend Request";
     }
 
     //ADD RECIPOCAL RELATIONSHIP
-    return $this->query(
-      "INSERT INTO `relation` (`from`, `to`, `status`) VALUES (?,?,'F')",
-      [$to, $from]
-    );
+    $s = "INSERT INTO `relation` (`from`, `to`, `status`) VALUES ($to,$from,'F')";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    return "Friend Request Accepted";
+    
   }
 
-  //CANCEL FRIEND REQUEST
+  //NEEDS WORK: GET FRIEND REQUESTS
+  //TODO: Display the results
+  function getReq ($userID) {
+    global $db, $t
+    //GET OUTGOING FRIEND REQUESTS (FROM USER TO OTHER PEOPLE)
+    $s = "SELECT * FROM `relation` WHERE `status`='P' AND `from`=$userID";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+
+    //GET INCOMING FRIEND REQUESTS (FROM OTHER PEOPLE TO USER)
+    $s = "SELECT * FROM `relation` WHERE `status`='P' AND `to`=$userID";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+    
+  }
+
+  //NEEDS WORK: GET FRIENDS
+  //TODO: Display the results
+  function getFriends ($userID') {
+    global $db, $t
+    // GET FRIENDS
+    $s = "SELECT * FROM `relation` WHERE `status`='F' AND `from`=$userID";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+  }
+
+
+  //STRETCH GOAL: CANCEL FRIEND REQUEST
   function cancelReq ($from, $to) {
     return $this->query(
       "DELETE FROM `relation` WHERE `status`='P' AND `from`=? AND `to`=?",
@@ -102,7 +131,8 @@ function scheduleWrite($ApiGameId, $HomeTeam, $AwayTeam){
     );
   }
 
-  //UNFRIEND
+
+  //STRETCH GOAL: UNFRIEND
   function unfriend ($from, $to) {
     return $this->query(
       "DELETE FROM `relation` WHERE ".
@@ -111,64 +141,19 @@ function scheduleWrite($ApiGameId, $HomeTeam, $AwayTeam){
       [$from, $to, $to, $from]
     );
   }
+  //STRETCH GOAL: BLOCK & UNBLOCK
+function block ($from, $to, $blocked=true) {
+  //BLOCK
+  if ($blocked) { return $this->query(
+    "INSERT INTO `relation` (`from`, `to`, `status`) VALUES (?,?,'B')",
+    [$from, $to]
+  ); }
 
-  //BLOCK & UNBLOCK
-  function block ($from, $to, $blocked=true) {
-    //BLOCK
-    if ($blocked) { return $this->query(
-      "INSERT INTO `relation` (`from`, `to`, `status`) VALUES (?,?,'B')",
-      [$from, $to]
-    ); }
-
-    //UNBLOCK
-    else { return $this->query(
-      "DELETE FROM `relation` WHERE `from`=? AND `to`=? AND `status`='B'",
-      [$from, $to]
-    ); }
-  }
-
-  //GET FRIEND REQUESTS
-  function getReq ($uid) {
-    //GET OUTGOING FRIEND REQUESTS (FROM USER TO OTHER PEOPLE)
-    $req = ["in"=>[], "out"=>[]];
-    $this->query(
-      "SELECT * FROM `relation` WHERE `status`='P' AND `from`=?",
-      [$uid]
-    );
-    while ($row = $this->stmt->fetch()) { $req['out'][$row['to']] = $row['since']; }
-
-    //GET INCOMING FRIEND REQUESTS (FROM OTHER PEOPLE TO USER)
-    $this->query(
-      "SELECT * FROM `relation` WHERE `status`='P' AND `to`=?", [$uid]
-    );
-    while ($row = $this->stmt->fetch()) { $req['in'][$row['from']] = $row['since']; }
-    return $req;
-  }
-
-  //GET FRIENDS & FOES (BLOCKED)
-  function getFriends ($uid) {
-    // GET FRIENDS
-    $friends = ["f"=>[], "b"=>[]];
-    $this->query(
-      "SELECT * FROM `relation` WHERE `status`='F' AND `from`=?", [$uid]
-    );
-    while ($row = $this->stmt->fetch()) { $friends["f"][$row['to']] = $row['since']; }
-
-    // GET FOES
-    $this->query(
-      "SELECT * FROM `relation` WHERE `status`='B' AND `from`=?", [$uid]
-    );
-    while ($row = $this->stmt->fetch()) { $friends["b"][$row['to']] = $row['since']; }
-    return $friends;
-  }
-
-  // GET ALL USERS
-  function getUsers () {
-    $this->query("SELECT * FROM `users`");
-    $users = [];
-    while ($row = $this->stmt->fetch()) { $users[$row['user_id']] = $row['user_name']; }
-    return $users;
-  }
+  //UNBLOCK
+  else { return $this->query(
+    "DELETE FROM `relation` WHERE `from`=? AND `to`=? AND `status`='B'",
+    [$from, $to]
+  ); }
 }
 
 ?>
