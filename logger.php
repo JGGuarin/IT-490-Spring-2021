@@ -18,7 +18,7 @@ class LoggerClient
         fwrite($this->logFile, "CLIENT LOGGING HAS BEGUN (at ".date(DATE_RFC2822).")".PHP_EOL);
         fwrite($this->logFile, "************************************************************".PHP_EOL);
 
-        $loggerClient = new rabbitMQClient("testRabbitMQ.ini", "loggerServer");
+        $loggerClient = new rabbitMQClient("testRabbitMQ.ini","loggerServer");
         echo "loggerClient BEGIN".PHP_EOL;
     }
 
@@ -32,7 +32,14 @@ class LoggerClient
 
         //json_encode($data) can handle arrays
         $log = $filePath." on line ".$lineNumber.": ".json_encode($data).PHP_EOL; 
-        fwrite($this->logFile, $log.PHP_EOL);
+        fwrite($this->logFile, $log);
+    }
+
+    // An error handler
+    function errorLog($errno, $errstr, $errfile, $errline)
+    {
+        $errorLog = $errfile. " on line ".$errline.": ".$errstr.". (errno: ".$errno.")".PHP_EOL;
+        fwrite($this->logFile, $errorLog);
     }
 
     // Automatically called when this class object is destructed or
@@ -64,10 +71,9 @@ class LoggerServer
         fwrite($this->logFile, "SERVER LOGGING HAS BEGUN (at ".date(DATE_RFC2822).")".PHP_EOL);
         fwrite($this->logFile, "************************************************************".PHP_EOL);
         
-        $loggerServer = new rabbitMQServer("testRabbitMQ.ini", "loggerServer");
+        $loggerServer = new rabbitMQServer("testRabbitMQ.ini","loggerServer");
         echo "loggerServer BEGIN".PHP_EOL;
-        
-        //$loggerServer->process_requests('requestProcessor');
+        $loggerServer->process_requests(array($this,'requestProcessor'));
     }
 
     function log($data)

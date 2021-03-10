@@ -24,7 +24,9 @@ $response = $client->send_request($request);
 //$response = $client->publish($request);
 
 $logger = new LoggerClient(); // LOGGY
+set_error_handler(array($logger,'errorLog')); // A static class method call
 $logger->log($request); // MORE LOGGY
+trigger_error("This is a test", E_USER_ERROR);
 
 echo "client received response: ".PHP_EOL;
 print_r($response);
