@@ -13,3 +13,21 @@ CLIENT LOGGING HAS BEGUN (at Mon, 08 Mar 2021 17:26:33 -0500)
 ************************************************************
 CLIENT LOGGING HAS ENDED (at Mon, 08 Mar 2021 17:26:33 -0500)
 ************************************************************
+
+************************************************************
+SERVER LOGGING HAS BEGUN (at Tue, 09 Mar 2021 19:15:07 -0500)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/mysqlconnect.php on line 9: "Test log from that database script."
+
+/home/jayguarz/git/rabbitmqphp_example/mysqlconnect.php on line 16: "mysqlconnect BEGIN\n"
+
+
+************************************************************
+SERVER LOGGING HAS BEGUN (at Tue, 09 Mar 2021 19:17:01 -0500)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/mysqlconnect.php on line 9: "Test log from that database script."
+
+/home/jayguarz/git/rabbitmqphp_example/mysqlconnect.php on line 16: "mysqlconnect BEGIN\n"
+
+/home/jayguarz/git/rabbitmqphp_example/mysqlconnect.php on line 33: "Successfully connect to database.\n"
+
