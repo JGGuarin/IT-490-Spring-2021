@@ -5,6 +5,10 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 require_once('logger.php');
 
+/////////////////
+// To Be Executed
+/////////////////
+
 $logger = new LoggerServer();
 $logger->log("Test log from that database script.");
 // Need to add change to logger.php so that it handles errors too
