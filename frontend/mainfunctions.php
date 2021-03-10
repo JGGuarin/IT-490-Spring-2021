@@ -344,7 +344,7 @@ function displayTeamPlayersInfo($infoNeeded, $fullName){
     }
 
     // print_r($infoNeededArr);
-*/
+    */
     return $info;
 }
 
@@ -413,6 +413,26 @@ function displayTeamsInLeague($leagueID){
 function createALeauge($leagueName, $userID, $username, $memberArray){
     global $db, $t;
 
+    
+    foreach($memberArray as $member){
+        if ($member == $memberArray[0]){
+            continue;
+        }if (doesUserExist($member)){
+            $s = "SELECT * FROM Relation WHERE `from`='$username' AND `to`='$member' AND `status`='F'";
+            ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+            $num = mysqli_num_rows($t);
+
+            //if no rows are returned, the users are not friends
+            if ($num == 0){
+                echo "<script>alert('You must be friends in order to add members to your league!')</script>";
+                return false;
+            }
+        }else{
+            echo "<script>alert('One of the member usernames does not exist!')</script>";
+            return false;
+        }
+    }
+
     $s = "INSERT INTO League(`LeagueName`, `CreatorID`, `CreatorName`) VALUES ('$leagueName', '$userID', '$username')";
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
 
@@ -438,6 +458,8 @@ function createALeauge($leagueName, $userID, $username, $memberArray){
         ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
     
     }
+    
+    echo "<script>alert('League created!')</script>";
 
     return $leagueID;
 }
