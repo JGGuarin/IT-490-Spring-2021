@@ -22,21 +22,41 @@ $phpArray = json_decode($output, true);
 //print_r($phpArray);
 
 
-$gameData = [];
+$gameID	= [];
+$homeNames = [];
+$awayNames = [];
+$combo = [];
+
 $var = 0;
 $var2 = 0;
+$var3 = 0;
+$var4 = 0;
+$var5 = 0;
+$var6 = 0;
+$var7 = 0;
 
 for ($i = 0; $i < count($phpArray['games']); $i++) {
-	$gameData[$var] = $phpArray['games'][$var2]['id'];
-	$var++;
-	$gameData[$var] = $phpArray['games'][$var2]['home']['name'];
-	$var++;
-	$gameData[$var] = $phpArray['games'][$var2]['away']['name'];
+	$gameID[$var] = $phpArray['games'][$var2]['id'];
 	$var++;
 	$var2++;
 }
 
-print_r($gameData);
+for ($i = 0; $i < count($phpArray['games']); $i++) {
+        $homeNames[$var3] = $phpArray['games'][$var4]['home']['name'];
+        $var3++;
+        $var4++;
+}
+
+for ($i = 0; $i < count($phpArray['games']); $i++) {
+        $awayNames[$var5] = $phpArray['games'][$var6]['away']['name'];
+        $var5++;
+        $var6++;
+}
+
+
+print_r($gameID);
+print_r($homeNames);
+print_r($awayNames);
 
 //echo count($phpArray);
 
