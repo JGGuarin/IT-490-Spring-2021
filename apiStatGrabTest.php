@@ -28,41 +28,80 @@ $phpArray = json_decode($output, true);
 //print_r($phpArray);
 
 
-$bigArray = [];
+$HomeBigArray = [];
+$AwayBigArray = [];
 $var = 0;
 $var2 = 0;
+$var3 = 0;
+$var4 = 0;
 
 for ($i = 0; $i < count($phpArray['home']['players']); $i++) {
 	
-	$bigArray[$var] = $phpArray['home']['players'][$var2]['full_name'];
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['full_name'];
 	$var++;
 
 
-	$bigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['points'];
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['points'];
 	$var++;
 
-	$bigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['assists'];
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['assists'];
 	$var++;
 
-	$bigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['rebounds'];
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['rebounds'];
 	$var++;
 
-	$bigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['steals'];
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['steals'];
 	$var++;
 
-	$bigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['blocks'];
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['blocks'];
 	$var++;
 
-	$bigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['field_goals_pct'];
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['field_goals_pct'];
+	$var++;
+	
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['three_points_pct'];
 	$var++;
 
-	$bigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['three_points_pct'];
-	$var++;
-
-	$bigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['free_throws_pct'];
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['free_throws_pct'];
 	$var++;
 	$var2++;
 
 }
 
-print_r($bigArray);
+for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
+
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['full_name'];
+	$var3++;
+
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['points'];
+	$var3++;
+
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['assists'];
+	$var3++;
+
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['rebounds'];
+	$var3++;
+
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['steals'];
+	$var3++;
+
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['blocks'];
+	$var3++;
+
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['field_goals_pct'];
+	$var3++;
+
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['three_points_pct'];
+	$var3++;
+
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['free_throws_pct'];
+	$var3++;
+	$var4++;
+}
+
+
+
+print_r($HomeBigArray);
+print_r($AwayBigArray);
+
+?>
