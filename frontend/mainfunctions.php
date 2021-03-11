@@ -1,13 +1,6 @@
 <?php
-require_once('path.inc');
-require_once('get_host_info.inc');
-require_once('rabiitMQLib.inc');
-
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
-
-$client = new rabbitMQClient("testRabbitmQ.ini", "testServer");
-$request = array();
 
 function get($fieldname, &$dataOK){
     global $db, $warnings;
@@ -26,9 +19,8 @@ function get($fieldname, &$dataOK){
     return $v;
 }
 
-
 function authenticate($username, $password){
-/*    global $db, $t;
+    global $db, $t;
 
     $s = "select * from Users where Username = '$username' and Password = '$password'";
 
@@ -41,15 +33,7 @@ function authenticate($username, $password){
     //access content of row in $t
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
     
-    return true;*/
-
-	$request['type'] = "authenticate";
-	$request['username'] = $username;
-	$request['password'] = $password;
-
-	$response = $client -> send_request($request);
-
-	return true;
+    return true;
 }
 
 function getUserId($username, $password){
@@ -64,7 +48,7 @@ function getUserId($username, $password){
 
     return $userID;
 }
-/*
+
 function getTeamID($userID, $leagueID){
     global $db, $t;
 
@@ -189,7 +173,7 @@ function createUserAccount($username, $password, $firstname, $lastname){
     global $db, $t;
 
     if (doesUserExist($username)){
-        echo "<script>alert('Username already exists. Pick another one :)')</script>";
+        echo "<script>alert('Username already exists. Pick another one')</script>";
         return false;
     }
     $s = "INSERT INTO Users(`Username`, `Password`, `FirstName`, `LastName`) VALUES ('$username', '$password', '$firstname', '$lastname')";
@@ -443,6 +427,30 @@ function displayTeamsInLeague($leagueID){
 
     return $usernames;
 
+}
+
+function displayGameLog($playerName){
+    global $db, $t;
+
+    $s = "SELECT * FROM BBStatLine WHERE FullName = '$playerName'";
+    ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+
+    $gameLog = array();
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $date = $r['StatDate'];
+        $points = $r['Point'];
+        $ast = $r['Assists'];
+        $reb = $r['Rebounds'];
+        $stls = $r['Steals'];
+        $blks = $r['Blocks'];
+        $fg = $r['FgPercent'];
+        $tp = $r['TptPercent'];
+        $ft = $r['FtPercent'];
+        
+        array_push($gameLog, $date, $points, $ast, $reb, $stls, $blks, $fg, $tp, $ft);
+    }
+
+    return $gameLog;
 }
 
 function createALeauge($leagueName, $userID, $username, $memberArray){
@@ -738,8 +746,6 @@ function acceptReq ($from, $to) {
     }
     }
 }
-
-
 
 
 function displayLeagueHistory($leagueID){

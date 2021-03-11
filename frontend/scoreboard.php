@@ -87,6 +87,7 @@ $leagueName = $_SESSION["leagueName"];
     </div>
   </div>
 
+  <!--
   <div class="card">
     <div class="container">
       <h2>Team Stats</h2>
@@ -138,7 +139,7 @@ $leagueName = $_SESSION["leagueName"];
       </table>
     </div>
   </div>
-
+          -->
 
 
   

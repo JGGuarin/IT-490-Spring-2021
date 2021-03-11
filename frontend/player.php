@@ -85,7 +85,7 @@ $playerName = sanitizeInput($playerName);
                               </td>";
                   }
                   else{
-                    echo "Player is already part of a team. They not available to be drafted at this time.";
+                    echo "<br><br>Player is already part of a team. They are not available to be drafted at this time.";
                   }
 
             ?></p>
@@ -179,13 +179,29 @@ $playerName = sanitizeInput($playerName);
       <table class="collapsed team" id="playerTable" width=100%>
         <tr class="header">
           <th scope="col">DATE</th>
-          <th scope="col">OPP</th>
           <th scope="col">PTS</th>
-          <th scope="col">REB</th>
           <th scope="col">AST</th>
+          <th scope="col">REB</th>
           <th scope="col">STL</th>
           <th scope="col">BLK</th>
+          <th scope="col">FG</th>
+          <th scope="col">TP</th>
+          <th scope="col">FT</th>
         </tr>
+        <?php
+        
+          $gameLog = displayGameLog($playerName);
+
+          echo "<tr>";
+          for ($i=0;$i<count($gameLog);$i++){
+            if ($i%9 == 0){
+              echo "</tr></td>";
+            } 
+            echo "<td>$gameLog[$i]</td>"; 
+  
+          }
+          echo "</tr>";
+        ?>
                     
       </table>
     </div>
