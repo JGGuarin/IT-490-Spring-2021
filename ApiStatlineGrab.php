@@ -108,7 +108,7 @@ for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
 }
 
 for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
-	$awayPoints[$i] = $phpArray[['away']['players'][$i]['statistics']['points'];
+	$awayPoints[$i] = $phpArray['away']['players'][$i]['statistics']['points'];
 }
 
 for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
@@ -143,22 +143,22 @@ for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
 function writeStatlineHome($homePlayers, $homePoints, $homeAssists, $homeRebounds, $homeSteals, $homeBlocks, $homeFgPercent, $homeTptPercent, $homeFtPercent, $phpArray){
     global $db, $t;
     for ($i = 0; $i < count($phpArray['home']['players']); $i++) {
-	    $s = "INSERT INTO BBStatLine(Point, Assists, Rebounds, Steals, Blocks, FgPercent, TptPercent, FtPercent, FullName) VALUES ($homePoints, $homeAssists, $homeRebounds, $homeSteals', $homeBlocks, $homeFgPercent, $homeTptPercent, $homeFtPercent, '$homePlayers)";
+	    $s = "INSERT INTO BBStatLine(`Point`, `Assists`, `Rebounds`, `Steals`, `Blocks`, `FullName`) VALUES ($homePoints[$i], $homeAssists[$i], $homeRebounds[$i], $homeSteals[$i], $homeBlocks[$i], '$homePlayers[$i]')";
         ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
     }
 
 }
 
-function writeStatlineAway($AwayPlayers, $AwayPoints, $AwayAssists, $AwayRebounds, $AwaySteals, $AwayBlocks, $AwayFgPercent, $AwayTptPercent, $AwayFtPercent, $phpArray){
+function writeStatlineAway($awayPlayers, $awayPoints, $awayAssists, $awayRebounds, $awaySteals, $awayBlocks, $awayFgPercent, $awayTptPercent, $awayFtPercent, $phpArray){
     global $db, $t;
     for ($i = 0; $i < count($phpArray['home']['players']); $i++) {
-	    $s = "INSERT INTO BBStatLine(Point, Assists, Rebounds, Steals, Blocks, FgPercent, TptPercent, FtPercent, FullName) VALUES ($AwayPoints, $AwayAssists, $AwayRebounds, $AwaySteals', $AwayBlocks, $AwayFgPercent, $AwayTptPercent, $AwayFtPercent, '$AwayPlayers)";
+	    $s = "INSERT INTO BBStatLine(`Point`, `Assists`, `Rebounds`, `Steals`, `Blocks`, `FullName`) VALUES ($awayPoints[$i], $awayAssists[$i], $awayRebounds[$i], $awaySteals[$i], $awayBlocks[$i], '$awayPlayers[$i]')";
         ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
     }
 
 }
 
-writeStatlineHome($homePlayers, $homePoints, $homeAssists, $homeRebounds, $homeSteals, $homeBlocks, $homeFgPercent, $homeTptPercent, $homeFtPercent, $phpArray);
-writeStatlineAway($AwayPlayers, $AwayPoints, $AwayAssists, $AwayRebounds, $AwaySteals, $AwayBlocks, $AwayFgPercent, $AwayTptPercent, $AwayFtPercent, $phpArray);
+//writeStatlineHome($homePlayers, $homePoints, $homeAssists, $homeRebounds, $homeSteals, $homeBlocks, $homeFgPercent, $homeTptPercent, $homeFtPercent, $phpArray);
+writeStatlineAway($awayPlayers, $awayPoints, $awayAssists, $awayRebounds, $awaySteals, $awayBlocks, $awayFgPercent, $awayTptPercent, $awayFtPercent, $phpArray);
 
 ?>
