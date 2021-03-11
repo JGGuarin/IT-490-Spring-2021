@@ -63,6 +63,7 @@ function requestProcessor($request)
   {
     return "ERROR: unsupported message type";
   }
+  /*
   switch ($request['type'])
   {
     case "login":
@@ -80,6 +81,27 @@ function requestProcessor($request)
         return getFirstName($request['UserID']);
     case "getLastName":
         return getLastName($request['UserID']);
+  }
+  */
+  switch ($request['type'])
+  {
+        case "get":
+            return get($request['fieldname']);
+        case "authenticate":
+            // Return to after questiong why it's only returning true
+        case "getUserId":
+            return getUserId($request['username'],$request['password']);
+        case "getTeamID":
+            return getTeamID($request['userID'],$request['leagueID']);
+        case "getTeamName":
+            return getTeamName($request['teamID']);
+        case "getLeagueMemberTeamName":
+            return getLeagueMemberTeamName($request['Username'],$request['leagueID']);
+        case "getLeagueID":
+            return getLeagueID($request['leagueName']);
+        case get
+
+    
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
