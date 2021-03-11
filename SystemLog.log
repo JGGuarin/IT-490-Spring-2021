@@ -13,3 +13,30 @@ CLIENT LOGGING HAS BEGUN (at Mon, 08 Mar 2021 17:26:33 -0500)
 ************************************************************
 CLIENT LOGGING HAS ENDED (at Mon, 08 Mar 2021 17:26:33 -0500)
 ************************************************************
+
+************************************************************
+CLIENT LOGGING HAS BEGUN (at Tue, 09 Mar 2021 11:47:31 -0500)
+************************************************************
+/root/newgit/IT-490-Spring-2021/testRabbitMQClient.php on line 27: {"type":"Login","username":"steve","password":"password","message":"this is a message"}
+
+************************************************************
+CLIENT LOGGING HAS ENDED (at Tue, 09 Mar 2021 11:47:31 -0500)
+************************************************************
+
+************************************************************
+CLIENT LOGGING HAS BEGUN (at Tue, 09 Mar 2021 21:26:12 -0500)
+************************************************************
+/root/newgit/IT-490-Spring-2021/testRabbitMQClient.php on line 27: {"type":"Login","username":"steve","password":"password","message":"test message"}
+
+************************************************************
+CLIENT LOGGING HAS ENDED (at Tue, 09 Mar 2021 21:26:12 -0500)
+************************************************************
+
+************************************************************
+CLIENT LOGGING HAS BEGUN (at Tue, 09 Mar 2021 21:27:12 -0500)
+************************************************************
+/root/newgit/IT-490-Spring-2021/testRabbitMQClient.php on line 27: {"type":"Login","username":"steve","password":"password","message":"test message"}
+
+************************************************************
+CLIENT LOGGING HAS ENDED (at Tue, 09 Mar 2021 21:27:12 -0500)
+************************************************************
