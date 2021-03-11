@@ -19,11 +19,10 @@ echo "mysqlconnect BEGIN".PHP_EOL;
 
 $logger->log("mysqlconnect BEGIN".PHP_EOL);
 
-/*
 $hostName = 'localhost';
-$user = '';
+$user = 'root';
 $password = '';
-$databaseName = '';
+$databaseName = 'FantasySports';
 $databaseConnection = new mysqli($hostName,$user,$password,$databaseName);  
 
 if ($databaseConnection->errno != 0)
@@ -37,7 +36,6 @@ else
 	echo "Successfully connected to database".PHP_EOL;
 	$logger->log("Successfully connected to database.".PHP_EOL);
 }
-*/
 
 // From testRabbitMQServer.php
 $server->process_requests('requestProcessor');
@@ -71,7 +69,17 @@ function requestProcessor($request)
 		return doLogin($request['username'],$request['password']);
     case "validate_session":
 		return doValidate($request['sessionId']);
-	// Add and remove some cases
+		// Add and remove some cases
+    case "authenticate":
+	    	return authenticate($request['username'],$request['password']);
+    case "get":
+        return get($request['fieldname']);
+    case "getUserId":
+        return getUserId($request['username'],$request['password']);
+    case "getFirstName":
+        return getFirstName($request['UserID']);
+    case "getLastName":
+        return getLastName($request['UserID']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
@@ -91,28 +99,28 @@ function doValidate($sessionId)
 //////////////////////////////////////////////////////////////////////
 
 function get($fieldname, &$dataOK){
-    global $db, $warnings;
+    //global $databaseConnection, $warnings;
     
-    $v = $_POST[$fieldname];
-    $v = trim($v);
-    $v = mysqli_real_escape_string($db, $v);
-    
+    //$v = $_POST[$fieldname];
+    //$v = trim($v);
+    //$v = mysqli_real_escape_string($databaseConnection, $v);
+    /*
     if (($fieldname == "username") && ($v == "")){
         $dataOK = false; $warnings .= "<br>username empty";
     }
     if (($fieldname == "password") && ($v == "")){
         $dataOK = false; $warnings .= "<br>password empty";
     }
-    
-    return $v;
+    */
+    $fieldname =$_POST[$fieldname];
+    return $fieldname;
 }
 
 function authenticate($username, $password){
-    global $db, $t;
 
     $s = "select * from Users where Username = '$username' and Password = '$password'";
 
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = ($databaseConnection->query($s)));// or die(mysqli_error($databaseConnection));
     $num = mysqli_num_rows($t);
 
     //if no rows are returned, the authentication failed
@@ -125,10 +133,10 @@ function authenticate($username, $password){
 }
 
 function getUserId($username, $password){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "select UserID from Users where Username='$username' and Password='$password'";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = ($databaseConnection->query($s))); //or die(mysqli_error($databaseConnection));
 
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
 
@@ -138,18 +146,17 @@ function getUserId($username, $password){
 }
 
 function getTeamID($userID, $leagueID){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "select TeamID from Team where UserID='$userID' and LeagueID = '$leagueID'";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
-
+    ($t = ($databaseConnection->query($s)));// or die(mysqli_error($databaseConnection));
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
 
     $teamID = $r["TeamID"];
 
     return $teamID;
 }
-
+/*
 function getTeamName($teamID){
     global $db, $t;
 
@@ -194,12 +201,12 @@ function getLeagueID($leagueName){
 
     return $leagueID;
 }
+*/
 
 function getFirstName($userID){
-    global $db, $t;
 
     $s = "select FirstName from Users where UserID='$userID'";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = ($databaseConnection->query($s)));// or die(mysqli_error($databaseConnection));
 
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
 
@@ -212,7 +219,7 @@ function getLastName($userID){
     global $db, $t;
 
     $s = "select LastName from Users where UserID='$userID'";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = ($databaseConnection->query($s)));// or die(mysqli_error($databaseConnection));
 
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
 
@@ -220,7 +227,7 @@ function getLastName($userID){
 
     return $lastname;
 }
-
+/*
 function doesUserExist($username){
     global $db, $t;
 
@@ -490,11 +497,11 @@ function playerAdd ($teamID, $playername) {
 //TODO: Update the team names
 function playerDrop ($teamID, $names) {
 	
-	$s = "UPDATE Player SET TeamID=0 WHERE TeamID='$teamID' AND FullName='$names'";
+//	$s = "UPDATE Player SET TeamID=0 WHERE TeamID='$teamID' AND FullName='$names'";
 
-	($t = mysqli_query($db, $s)) or die (mysqli_error($db));
-	$num = mysqli_num_rows($t);
-}
+//	($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+//	$num = mysqli_num_rows($t);
+//}
   
 //TODO Player Averages
   
@@ -509,7 +516,8 @@ function addStatline ($PlayerID, $Points, $Assists, $Rebounds, $Steals, $Blocks,
 }
   
 //TODO: Write the return from the schedule call
-function scheduleWrite($ApiGameId, $HomeTeam, $AwayTeam) {
+//function scheduleWrite($ApiGameId, $HomeTeam, $AwayTeam) {
 	
-}
+//}
+*/
 ?>
