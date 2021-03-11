@@ -5,7 +5,9 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 require_once('logger.php'); // "Importing" logger.php
 
-$client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+// Be mindful of which server you're trying to be a client of
+$client = new rabbitMQClient("testRabbitMQ.ini","apiServer");
+
 if (isset($argv[1]))
 {
   $msg = $argv[1];
