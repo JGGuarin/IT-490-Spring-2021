@@ -1,6 +1,13 @@
 <?php
+require_once('path.inc');
+require_once('get_host_info.inc');
+require_once('rabiitMQLib.inc');
+
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
+
+$client = new rabbitMQClient("testRabbitmQ.ini", "testServer");
+$request = array();
 
 function get($fieldname, &$dataOK){
     global $db, $warnings;
@@ -19,8 +26,9 @@ function get($fieldname, &$dataOK){
     return $v;
 }
 
+
 function authenticate($username, $password){
-    global $db, $t;
+/*    global $db, $t;
 
     $s = "select * from Users where Username = '$username' and Password = '$password'";
 
@@ -33,7 +41,15 @@ function authenticate($username, $password){
     //access content of row in $t
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
     
-    return true;
+    return true;*/
+
+	$request['type'] = "authenticate";
+	$request['username'] = $username;
+	$request['password'] = $password;
+
+	$response = $client -> send_request($request);
+
+	return true;
 }
 
 function getUserId($username, $password){
@@ -48,7 +64,7 @@ function getUserId($username, $password){
 
     return $userID;
 }
-
+/*
 function getTeamID($userID, $leagueID){
     global $db, $t;
 
