@@ -1,10 +1,6 @@
 #!/usr/bin/php
 <?php
 
-/////////////////
-// To Be Executed
-/////////////////
-
 $hostName = 'localhost';
 $user = 'root';
 $password = '';
@@ -26,7 +22,7 @@ else
 $curl = curl_init();
 
 // set our url with curl_setopt()
-curl_setopt($curl, CURLOPT_URL, "http://api.sportradar.us/nba/trial/v7/en/games/08ef9483-b512-4498-8bb0-dc9f846112cd/summary.json?api_key=mkybkfpkm6pyabeyu89x5gft");
+curl_setopt($curl, CURLOPT_URL, "http://api.sportradar.us/nba/trial/v7/en/games/ed238559-8f25-40fd-96e0-07450e995186/summary.json?api_key=mkybkfpkm6pyabeyu89x5gft"); //change based on game id found through schedule call
 
 // return the transfer as a string, also with setopt()
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -44,121 +40,115 @@ $phpArray = json_decode($output, true);
 //print_r($phpArray);
 
 
-$homePlayers	    = [];
-$awayPlayers	    = [];
-
-$homePoints	        = [];
-$homeAssists	    = [];
-$homeRebounds	    = [];
-$homeSteals	        = [];
-$homeBlocks	        = [];
-$homeFgPercent      = [];
-$homeTptPercent     = [];
-$homeFtPercent      = [];
-
-$awayPoints	        = [];
-$awayAssists	    = [];
-$awayRebounds	    = [];
-$awaySteals	        = [];
-$awayBlocks	        = [];
-$awayFgPercent      = [];
-$awayTptPercent     = [];
-$awayFtPercent      = [];
+$HomeBigArray = [];
+$var = 0;
+$var2 = 0;
+$var3 = 0;
+$var4 = 0;
 
 for ($i = 0; $i < count($phpArray['home']['players']); $i++) {
-	$homePlayers[$i] = $phpArray['home']['players'][$i]['full_name'];
-}
+	
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['full_name'];
+	$var++;
 
-for ($i = 0; $i < count($phpArray['home']['players'][$i]); $i++) {
-	$homePoints[$i] = $phpArray['home']['players'][$i]['statistics']['points'];
-}
 
-for ($i = 0; $i < count($phpArray['home']['players'][$i]); $i++) {
-    $homeAssists[$i] = $phpArray['home']['players'][$i]['statistics']['assists'];
-}
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['points'];
+	$var++;
 
-for ($i = 0; $i < count($phpArray['home']['players'][$i]); $i++) {
-    $homeRebounds[$i] = $phpArray['home']['players'][$i]['statistics']['rebounds'];
-}
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['assists'];
+	$var++;
 
-for ($i = 0; $i < count($phpArray['home']['players'][$i]); $i++) {
-    $homeSteals[$i] = $phpArray['home']['players'][$i]['statistics']['steals'];
-}
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['rebounds'];
+	$var++;
 
-for ($i = 0; $i < count($phpArray['home']['players'][$i]); $i++) {
-    $homeBlocks[$i] = $phpArray['home']['players'][$i]['statistics']['blocks'];
-}
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['steals'];
+	$var++;
 
-for ($i = 0; $i < count($phpArray['home']['players'][$i]); $i++) {
-    $homeFgPercent[$i] = $phpArray['home']['players'][$i]['statistics']['field_goals_pct'];
-}
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['blocks'];
+	$var++;
 
-for ($i = 0; $i < count($phpArray['home']['players'][$i]); $i++) {
-    $homeTptPercent[$i] = $phpArray['home']['players'][$i]['statistics']['three_points_pct'];
-}
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['field_goals_pct'];
+	$var++;
 
-for ($i = 0; $i < count($phpArray['home']['players'][$i]); $i++) {
-    $homeFtPercent[$i] = $phpArray['home']['players'][$i]['statistics']['free_throws_pct'];
-}
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['three_points_pct'];
+	$var++;
 
+	$HomeBigArray[$var] = $phpArray['home']['players'][$var2]['statistics']['free_throws_pct'];
+	$var++;
+	$var2++;
+
+}
 
 
 for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
-	$awayPlayers[$i] = $phpArray['away']['players'][$i]['full_name'];
-}
 
-for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
-	$awayPoints[$i] = $phpArray['away']['players'][$i]['statistics']['points'];
-}
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['full_name'];
+	$var3++;
 
-for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
-    $awayAssists[$i] = $phpArray['away']['players'][$i]['statistics']['assists'];
-}
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['points'];
+	$var3++;
 
-for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
-    $awayRebounds[$i] = $phpArray['away']['players'][$i]['statistics']['rebounds'];
-}
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['assists'];
+	$var3++;
 
-for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
-    $awaySteals[$i] = $phpArray['away']['players'][$i]['statistics']['steals'];
-}
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['rebounds'];
+	$var3++;
 
-for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
-    $awayBlocks[$i] = $phpArray['away']['players'][$i]['statistics']['blocks'];
-}
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['steals'];
+	$var3++;
 
-for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
-    $awayFgPercent[$i] = $phpArray['away']['players'][$i]['statistics']['field_goals_pct'];
-}
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['blocks'];
+	$var3++;
 
-for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
-    $awayTptPercent[$i] = $phpArray['away']['players'][$i]['statistics']['three_points_pct'];
-}
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['field_goals_pct'];
+	$var3++;
 
-for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
-    $awayFtPercent[$i] = $phpArray['away']['players'][$i]['statistics']['free_throws_pct'];
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['three_points_pct'];
+	$var3++;
+
+	$AwayBigArray[$var3] = $phpArray['away']['players'][$var4]['statistics']['free_throws_pct'];
+	$var3++;
+	$var4++;
 }
 
 
-function writeStatlineHome($homePlayers, $homePoints, $homeAssists, $homeRebounds, $homeSteals, $homeBlocks, $homeFgPercent, $homeTptPercent, $homeFtPercent, $phpArray){
+
+//print_r($HomeBigArray);
+//print_r($AwayBigArray);
+function writeStatlineHome ($HomeBigArray){
     global $db, $t;
-    for ($i = 0; $i < count($phpArray['home']['players']); $i++) {
-	    $s = "INSERT INTO BBStatLine(`Point`, `Assists`, `Rebounds`, `Steals`, `Blocks`, `FullName`) VALUES ($homePoints[$i], $homeAssists[$i], $homeRebounds[$i], $homeSteals[$i], $homeBlocks[$i], '$homePlayers[$i]')";
-        ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
-    }
+    $lilVar = 0;
+    $bigVar = 9;
+    for ($i = 0; $i < 17; $i++){ //set i < based on total number of values /9
+        $HomeSliced = [];
+        $HomeSliced = array_slice($HomeBigArray, $lilVar, $bigVar);
 
+        $s = "INSERT INTO BBStatLine(`Point`, `Assists`, `Rebounds`, `Steals`, `Blocks`, `FgPercent`, `TptPercent`, `FtPercent`, `FullName`) VALUES ($HomeSliced[1], $HomeSliced[2], $HomeSliced[3], $HomeSliced[4], $HomeSliced[5], $HomeSliced[6], $HomeSliced[7], $HomeSliced[8], '$HomeSliced[0]')";
+        ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+
+        $lilVar += 9;
+        $bigVar += 9;
+
+    }
 }
 
-function writeStatlineAway($awayPlayers, $awayPoints, $awayAssists, $awayRebounds, $awaySteals, $awayBlocks, $awayFgPercent, $awayTptPercent, $awayFtPercent, $phpArray){
+function writeStatlineAway ($AwayBigArray){
     global $db, $t;
-    for ($i = 0; $i < count($phpArray['home']['players']); $i++) {
-	    $s = "INSERT INTO BBStatLine(`Point`, `Assists`, `Rebounds`, `Steals`, `Blocks`, `FullName`) VALUES ($awayPoints[$i], $awayAssists[$i], $awayRebounds[$i], $awaySteals[$i], $awayBlocks[$i], '$awayPlayers[$i]')";
-        ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
-    }
+    $lilVar = 0;
+    $bigVar = 9;
+    for ($i = 0; $i < 16; $i++){ //set i < based on total number of values /9
+        $AwaySliced = [];
+        $AwaySliced = array_slice($AwayBigArray, $lilVar, $bigVar);
 
+        $s = "INSERT INTO BBStatLine(`Point`, `Assists`, `Rebounds`, `Steals`, `Blocks`, `FgPercent`, `TptPercent`, `FtPercent`, `FullName`) VALUES ($AwaySliced[1], $AwaySliced[2], $AwaySliced[3], $AwaySliced[4], $AwaySliced[5], $AwaySliced[6], $AwaySliced[7], $AwaySliced[8], '$AwaySliced[0]')";
+        ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+
+        $lilVar += 9;
+        $bigVar += 9;
+
+    }
 }
 
-//writeStatlineHome($homePlayers, $homePoints, $homeAssists, $homeRebounds, $homeSteals, $homeBlocks, $homeFgPercent, $homeTptPercent, $homeFtPercent, $phpArray);
-writeStatlineAway($awayPlayers, $awayPoints, $awayAssists, $awayRebounds, $awaySteals, $awayBlocks, $awayFgPercent, $awayTptPercent, $awayFtPercent, $phpArray);
-
+writeStatlineHome($HomeBigArray);
+writeStatlineAway ($AwayBigArray);
 ?>
