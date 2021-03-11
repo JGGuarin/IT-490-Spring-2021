@@ -70,7 +70,7 @@ for ($i = 0; $i < count($phpArray['home']['players']); $i++) {
 }
 
 for ($i = 0; $i < count($phpArray['home']['players'][$i]); $i++) {
-	$homePoints[$i] = $phpArray[['home']['players'][$i]['statistics']['points'];
+	$homePoints[$i] = $phpArray['home']['players'][$i]['statistics']['points'];
 }
 
 for ($i = 0; $i < count($phpArray['home']['players'][$i]); $i++) {
@@ -139,22 +139,26 @@ for ($i = 0; $i < count($phpArray['away']['players']); $i++) {
     $awayFtPercent[$i] = $phpArray['away']['players'][$i]['statistics']['free_throws_pct'];
 }
 
-print $homePoints;
-print $awayPoints;
 
-
-/*
-function writeStatlineHome($homePlayers, $homePoints, $homeAssists, $homeRebounds, $homeSteals, $homeBlocks, $homeFgPercent, $homeTptPercent, $homeFtPercent){
+function writeStatlineHome($homePlayers, $homePoints, $homeAssists, $homeRebounds, $homeSteals, $homeBlocks, $homeFgPercent, $homeTptPercent, $homeFtPercent, $phpArray){
     global $db, $t;
     for ($i = 0; $i < count($phpArray['home']['players']); $i++) {
-	    $s = "INSERT INTO BBStatLine";
+	    $s = "INSERT INTO BBStatLine(Point, Assists, Rebounds, Steals, Blocks, FgPercent, TptPercent, FtPercent, FullName) VALUES ($homePoints, $homeAssists, $homeRebounds, $homeSteals', $homeBlocks, $homeFgPercent, $homeTptPercent, $homeFtPercent, '$homePlayers)";
         ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
     }
 
 }
-*/
 
-//writeStatlineHome()
-//writeStatlineAway()
+function writeStatlineAway($AwayPlayers, $AwayPoints, $AwayAssists, $AwayRebounds, $AwaySteals, $AwayBlocks, $AwayFgPercent, $AwayTptPercent, $AwayFtPercent, $phpArray){
+    global $db, $t;
+    for ($i = 0; $i < count($phpArray['home']['players']); $i++) {
+	    $s = "INSERT INTO BBStatLine(Point, Assists, Rebounds, Steals, Blocks, FgPercent, TptPercent, FtPercent, FullName) VALUES ($AwayPoints, $AwayAssists, $AwayRebounds, $AwaySteals', $AwayBlocks, $AwayFgPercent, $AwayTptPercent, $AwayFtPercent, '$AwayPlayers)";
+        ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+    }
+
+}
+
+writeStatlineHome($homePlayers, $homePoints, $homeAssists, $homeRebounds, $homeSteals, $homeBlocks, $homeFgPercent, $homeTptPercent, $homeFtPercent, $phpArray);
+writeStatlineAway($AwayPlayers, $AwayPoints, $AwayAssists, $AwayRebounds, $AwaySteals, $AwayBlocks, $AwayFgPercent, $AwayTptPercent, $AwayFtPercent, $phpArray);
 
 ?>
