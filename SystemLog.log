@@ -31,3 +31,27 @@ SERVER LOGGING HAS BEGUN (at Tue, 09 Mar 2021 19:17:01 -0500)
 
 /home/jayguarz/git/rabbitmqphp_example/mysqlconnect.php on line 33: "Successfully connect to database.\n"
 
+
+************************************************************
+SERVER LOGGING HAS BEGUN (at Tue, 09 Mar 2021 21:26:08 -0500)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/testRabbitMQServerLogger.php on line 36: "Test log."
+
+
+************************************************************
+SERVER LOGGING HAS BEGUN (at Tue, 09 Mar 2021 21:26:41 -0500)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/mysqlconnect.php on line 13: "Test log from that database script."
+
+/home/jayguarz/git/rabbitmqphp_example/mysqlconnect.php on line 20: "mysqlconnect BEGIN\n"
+
+/home/jayguarz/git/rabbitmqphp_example/mysqlconnect.php on line 37: "Successfully connected to database.\n"
+
+
+************************************************************
+SERVER LOGGING HAS BEGUN (at Tue, 09 Mar 2021 21:27:05 -0500)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/mysqlconnect.php on line 13: "Test log from that database script."
+
+/home/jayguarz/git/rabbitmqphp_example/mysqlconnect.php on line 20: "mysqlconnect BEGIN\n"
+

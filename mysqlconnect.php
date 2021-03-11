@@ -19,6 +19,7 @@ echo "mysqlconnect BEGIN".PHP_EOL;
 
 $logger->log("mysqlconnect BEGIN".PHP_EOL);
 
+/*
 $hostName = 'localhost';
 $user = '';
 $password = '';
@@ -36,6 +37,7 @@ else
 	echo "Successfully connected to database".PHP_EOL;
 	$logger->log("Successfully connected to database.".PHP_EOL);
 }
+*/
 
 // From testRabbitMQServer.php
 $server->process_requests('requestProcessor');

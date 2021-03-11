@@ -73,7 +73,7 @@ class LoggerServer
         
         $loggerServer = new rabbitMQServer("testRabbitMQ.ini","loggerServer");
         echo "loggerServer BEGIN".PHP_EOL;
-        $loggerServer->process_requests(array($this,'requestProcessor'));
+        //$loggerServer->process_requests(array($this,'requestProcessor'));
     }
 
     function log($data)
