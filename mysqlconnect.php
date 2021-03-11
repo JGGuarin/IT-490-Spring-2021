@@ -25,6 +25,31 @@ $password = '';
 $databaseName = 'FantasySports';
 $databaseConnection = new mysqli($hostName,$user,$password,$databaseName);  
 
+function authentication($username, $password){
+    $hostName = 'localhost';
+    $user = 'root';
+    $password = '';
+    $databaseName = 'FantasySports';
+    $databaseConnection = new mysqli($hostName,$user,$password,$databaseName);
+
+    $userInfo = array();
+
+    $username = $databaseConnection->escape_string($username);
+    $result = $databaseConnection->query("SELECT * FROM Users WHERE Username='$username' and Password='$password'");
+
+    $user = $result -> fetch_assoc();
+
+    if ($result -> num_rows == 0){
+        echo "Incorrect credentials";
+        return false;
+    }else{
+        echo "correct credentails";
+        $userInfo['username'] = $user['Username'];
+        $userInfo['UserID'] = $user['UserID'];
+        return $userInfo;
+    }
+}
+
 if ($databaseConnection->errno != 0)
 {
 	echo "Failed to connect to database: ".$databaseConnection->error.PHP_EOL;
@@ -45,11 +70,11 @@ exit();
 /*
 $query = "select * from students;";
 
-$response = $mydb->query($query);
-if ($mydb->errno != 0)
+$response = $mydatabaseConnection->query($query);
+if ($mydatabaseConnection->errno != 0)
 {
 	echo "failed to execute query:".PHP_EOL;
-	echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+	echo __FILE__.':'.__LINE__.":error: ".$mydatabaseConnection->error.PHP_EOL;
 	exit(0);
 }
 **/
@@ -156,12 +181,12 @@ function getTeamID($userID, $leagueID){
 
     return $teamID;
 }
-/*
+
 function getTeamName($teamID){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "select TeamName from Team where TeamID = '$teamID'";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
 
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
 
@@ -172,10 +197,10 @@ function getTeamName($teamID){
 }
 
 function getLeagueMemberTeamName($Username, $leagueID){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "select UserID from Users where Username = '$Username'";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
 
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
 
@@ -190,10 +215,10 @@ function getLeagueMemberTeamName($Username, $leagueID){
 }
 
 function getLeagueID($leagueName){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "select LeagueID from League where LeagueName='$leagueName'";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
 
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
 
@@ -201,7 +226,7 @@ function getLeagueID($leagueName){
 
     return $leagueID;
 }
-*/
+
 
 function getFirstName($userID){
 
@@ -216,7 +241,7 @@ function getFirstName($userID){
 }
 
 function getLastName($userID){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "select LastName from Users where UserID='$userID'";
     ($t = ($databaseConnection->query($s)));// or die(mysqli_error($databaseConnection));
@@ -227,13 +252,13 @@ function getLastName($userID){
 
     return $lastname;
 }
-/*
+
 function doesUserExist($username){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "select * from Users where Username = '$username'";
 
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
     $num = mysqli_num_rows($t);
 
     //if no rows are returned, the user doesnt exist
@@ -246,13 +271,13 @@ function doesUserExist($username){
 }
 
 function createUserAccount($username, $password, $firstname, $lastname){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "INSERT INTO Users(`Username`, `Password`, `FirstName`, `LastName`) VALUES ('$username', '$password', '$firstname', '$lastname')";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
 
     $s = "select UserID from Users where Username='$username'";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
 
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
     $userID = $r["UserID"];
@@ -261,11 +286,11 @@ function createUserAccount($username, $password, $firstname, $lastname){
 }
 
 function getUserLeagues($userID){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "SELECT * FROM Team where UserID = '$userID'";
 
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
     $num = mysqli_num_rows($t);
 
     $leagueIDs = array();
@@ -280,7 +305,7 @@ function getUserLeagues($userID){
 
     foreach ($leagueIDs as $leagueID){
         $s = "SELECT LeagueName FROM League where LeagueID = '$leagueID'";
-        ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+        ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
 
         $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
         $leagueName = $r["LeagueName"];
@@ -293,10 +318,10 @@ function getUserLeagues($userID){
 }
 
 function displayPlayersNames(){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "SELECT * FROM PlayerImport";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
     $num = mysqli_num_rows($t);
 
     $names = array();
@@ -310,10 +335,10 @@ function displayPlayersNames(){
 }
 
 function displayPlayersPositions(){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "SELECT * FROM PlayerImport";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
     $num = mysqli_num_rows($t);
 
     $positions = array();
@@ -327,10 +352,10 @@ function displayPlayersPositions(){
 }
 
 function displayPlayersTeams(){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "SELECT * FROM PlayerImport";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
     $num = mysqli_num_rows($t);
 
     $teams = array();
@@ -344,10 +369,10 @@ function displayPlayersTeams(){
 }
 
 function displayPlayersInfo($stat){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "SELECT $stat FROM PlayerImport";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
     $num = mysqli_num_rows($t);
 
     $stats = array();
@@ -362,11 +387,11 @@ function displayPlayersInfo($stat){
 }
 
 function displayAvailability($playerName){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "select * from Player where FullName = '$playerName'";
 
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
     $num = mysqli_num_rows($t);
 
     //if no rows are returned, the user doesnt exist
@@ -381,10 +406,10 @@ function displayAvailability($playerName){
 }
 
 function displayTeamPlayersNames($teamID){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "SELECT * FROM Player where TeamID = '$teamID'";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
     $num = mysqli_num_rows($t);
 
     $fullnames = array();
@@ -398,10 +423,10 @@ function displayTeamPlayersNames($teamID){
 }
 
 function displayTeamPlayersInfo($infoNeeded, $fullName){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "SELECT $infoNeeded FROM PlayerImport where FullName = '$fullName'";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
     $num = mysqli_num_rows($t);
 
     $infoNeededArr = array();
@@ -415,10 +440,10 @@ function displayTeamPlayersInfo($infoNeeded, $fullName){
 }
 
 function displayLeagueMembers($leagueID){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "SELECT * FROM Team where LeagueID = '$leagueID'";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
     $num = mysqli_num_rows($t);
 
 
@@ -431,7 +456,7 @@ function displayLeagueMembers($leagueID){
     $usernames = array();
     foreach ($userIDs as $userID){
         $s = "SELECT Username FROM Users where UserID = '$userID'";
-        ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+        ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
         $num = mysqli_num_rows($t);
 
 
@@ -446,14 +471,14 @@ function displayLeagueMembers($leagueID){
 }
 
 function createALeauge($leagueName, $userID, $username, $memberArray){
-    global $db, $t;
+    global $databaseConnection, $t;
 
     $s = "INSERT INTO League(`LeagueName`, `CreatorID`, `CreatorName`) VALUES ('$leagueName', '$userID', '$username')";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
 
    //dont know why $leagueID = getLeagueID($leagueName) is not working :/
    $s = "select LeagueID from League where LeagueName='$leagueName'";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
 
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
 
@@ -462,7 +487,7 @@ function createALeauge($leagueName, $userID, $username, $memberArray){
 
     foreach($memberArray as $member){
         $s = "SELECT * from Users where Username = '$member'";
-        ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+        ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
 
         $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
         $memberUserID = $r["UserID"];
@@ -470,7 +495,7 @@ function createALeauge($leagueName, $userID, $username, $memberArray){
         echo "userID: $memberUserID";
 
         $s = "INSERT INTO Team(`LeagueID`, `UserID`, `TeamName`) VALUES ('$leagueID', '$memberUserID', 'Team $member')";
-        ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+        ($t = mysqli_query($databaseConnection, $s)) or die(mysqli_error($databaseConnection));
     
     }
 
@@ -484,40 +509,75 @@ function createALeauge($leagueName, $userID, $username, $memberArray){
 //ADD Player
 //TODO: If loop to check if maximum roster limit will be broken
 function playerAdd ($teamID, $playername) {
-	global $db, $t;
+	global $databaseConnection, $t;
   
 	$s = "UPDATE Player SET TeamID='$teamID' WHERE FullName='$playername'";
   
-	($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+	($t = mysqli_query($databaseConnection, $s)) or die (mysqli_error($databaseConnection));
 	$num = mysqli_num_rows($t);
 }
   
 //DROP Player
 //TODO: If loop to check if minimum roster limit will be broken
 //TODO: Update the team names
-function playerDrop ($teamID, $names) {
+//function playerDrop ($teamID, $names) {
 	
 //	$s = "UPDATE Player SET TeamID=0 WHERE TeamID='$teamID' AND FullName='$names'";
 
-//	($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+//	($t = mysqli_query($databaseConnection, $s)) or die (mysqli_error($databaseConnection));
 //	$num = mysqli_num_rows($t);
 //}
   
 //TODO Player Averages
   
-//Insert a statline
-function addStatline ($PlayerID, $Points, $Assists, $Rebounds, $Steals, $Blocks, $FgPercent, $TptPercent, $FtPercent) {
-	global $db, $t;
+function writeStatlineHome ($HomeBigArray){
+    global $databaseConnection, $t;
+    $lilVar = 0;
+    $bigVar = 9;
+    for ($i = 0; $i < 17; $i++){ //set i < based on total number of values /9
+        $HomeSliced = [];
+        $HomeSliced = array_slice($HomeBigArray, $lilVar, $bigVar);
 
-	$s = "INSERT INTO BBStatLine(PlayerID, Point, Assists, Rebounds, Steals, Blocks, FgPercent, TptPercent, FtPercent) VALUES ($PlayerID, $Points, $Assists, $Rebounds, $Steals, $Blocks, $FgPercent, $TptPercent)";
+        $s = "INSERT INTO BBStatLine(`Point`, `Assists`, `Rebounds`, `Steals`, `Blocks`, `FgPercent`, `TptPercent`, `FtPercent`, `FullName`) VALUES ($HomeSliced[1], $HomeSliced[2], $HomeSliced[3], $HomeSliced[4], $HomeSliced[5], $HomeSliced[6], $HomeSliced[7], $HomeSliced[8], '$HomeSliced[0]')";
+        ($t = mysqli_query($databaseConnection, $s)) or die (mysqli_error($databaseConnection));
 
-	($t = mysqli_query($db, $s)) or die (mysqli_error($db));
-	$num = mysqli_num_rows($t);
+        $lilVar += 9;
+        $bigVar += 9;
+
+    }
+    return "Write Succesful";
+}
+
+function writeStatlineAway ($AwayBigArray){
+    global $databaseConnection, $t;
+    $lilVar = 0;
+    $bigVar = 9;
+    for ($i = 0; $i < 16; $i++){ //set i < based on total number of values /9
+        $AwaySliced = [];
+        $AwaySliced = array_slice($AwayBigArray, $lilVar, $bigVar);
+
+        $s = "INSERT INTO BBStatLine(`Point`, `Assists`, `Rebounds`, `Steals`, `Blocks`, `FgPercent`, `TptPercent`, `FtPercent`, `FullName`) VALUES ($AwaySliced[1], $AwaySliced[2], $AwaySliced[3], $AwaySliced[4], $AwaySliced[5], $AwaySliced[6], $AwaySliced[7], $AwaySliced[8], '$AwaySliced[0]')";
+        ($t = mysqli_query($databaseConnection, $s)) or die (mysqli_error($databaseConnection));
+
+        $lilVar += 9;
+        $bigVar += 9;
+
+    }
+    return "Write Succesful";
+}
+
+function writeSchedule($gameID, $homeNames, $awayNames, $phpArray){
+    global $databaseConnection, $t;
+    for ($i = 0; $i < count($phpArray['games']); $i++) {
+	    $s = "INSERT INTO ApiGame (`ApiGameId`, `HomeTeam`, `AwayTeam`) VALUES ('$gameID[$i]', '$homeNames[$i]', '$awayNames[$i]')";
+        ($t = mysqli_query($databaseConnection, $s)) or die (mysqli_error($databaseConnection));
+    }
+
 }
   
 //TODO: Write the return from the schedule call
 //function scheduleWrite($ApiGameId, $HomeTeam, $AwayTeam) {
 	
 //}
-*/
+
 ?>
