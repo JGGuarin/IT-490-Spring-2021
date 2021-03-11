@@ -661,7 +661,7 @@ function request ($from, $to) {
 
     if ($num == 0){
         //RUN THE NEXT PART
-        $s =  "SELECT * FROM `relation` WHERE (`status`='P' AND `from`='$from' AND `to`='$to') OR (`status`='P' AND `from`='$to' AND `to`='$from')";
+        $s =  "SELECT * FROM `Relation` WHERE (`status`='P' AND `from`='$from' AND `to`='$to') OR (`status`='P' AND `from`='$to' AND `to`='$from')";
 
         ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
         $num = mysqli_num_rows($t);
@@ -683,13 +683,13 @@ function request ($from, $to) {
 function acceptReq ($from, $to) {
     global $db, $t;
     //UPGRADE STATUS TO "F"RIENDS
-    $s = "UPDATE `relation` SET `status`='F' WHERE `status`='P' AND `from`='$from' AND `to`='$to'";
+    $s = "UPDATE `Relation` SET `status`='F' WHERE `status`='P' AND `from`='$from' AND `to`='$to'";
 
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
  
 
     //ADD RECIPOCAL RELATIONSHIP
-    $s = "INSERT INTO `relation` (`from`, `to`, `status`) VALUES ('$to','$from','F')";
+    $s = "INSERT INTO `Relation` (`from`, `to`, `status`) VALUES ('$to','$from','F')";
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
     return "Friend Request Accepted";
     
@@ -709,7 +709,7 @@ function acceptReq ($from, $to) {
     */
 
     //GET INCOMING FRIEND REQUESTS (FROM OTHER PEOPLE TO USER)
-    $s = "SELECT * FROM `relation` WHERE `status`='P' AND `to`='$username'";
+    $s = "SELECT * FROM `Relation` WHERE `status`='P' AND `to`='$username'";
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
 
     $num = mysqli_num_rows($t);
@@ -733,7 +733,7 @@ function acceptReq ($from, $to) {
   function getFriends ($username) {
     global $db, $t;
     // GET FRIENDS
-    $s = "SELECT * FROM `relation` WHERE `status`='F' AND (`from`='$username' OR `to`='$username')";
+    $s = "SELECT * FROM `Relation` WHERE `status`='F' AND (`from`='$username' OR `to`='$username')";
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
 
     $num = mysqli_num_rows($t);
