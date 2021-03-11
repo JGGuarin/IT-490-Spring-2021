@@ -172,6 +172,10 @@ function doesUserExist($username){
 function createUserAccount($username, $password, $firstname, $lastname){
     global $db, $t;
 
+    if (doesUserExist($username)){
+        echo "<script>alert('Username already exists. Pick another one :)')</script>";
+        return false;
+    }
     $s = "INSERT INTO Users(`Username`, `Password`, `FirstName`, `LastName`) VALUES ('$username', '$password', '$firstname', '$lastname')";
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
 
