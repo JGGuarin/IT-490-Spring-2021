@@ -2,7 +2,7 @@
 
 $hostname = "localhost"; 	
 $username = "root" ;
-$project  = "samsql" ;
+$project  = "newsql" ;
 $password = "root" ;
 
 //connect to the database

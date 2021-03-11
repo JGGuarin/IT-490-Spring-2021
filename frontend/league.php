@@ -91,10 +91,12 @@ $leagueName = $_SESSION["leagueName"];
                   echo "<b>User: </b>" . $leagueMember . " | <b>Team: </b>" . getLeagueMemberTeamName($leagueMember, $leagueID) . "<br>";
                 }
 
+                echo "<hr>Draft a team a team for one of your league members: <br>";
+
                 if ($username == $creatorUsername){
                   echo "<form method='post' action = 'draft.php'> 
                             <input type='submit' name='draftButton'
-                                class='button' value='Set Draft'/> 
+                                class='button' value='Draft a Team'/> 
                        </form> ";
                 }
             ?>

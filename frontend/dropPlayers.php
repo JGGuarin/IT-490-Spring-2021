@@ -19,9 +19,9 @@ $leagueName = $_SESSION["leagueName"];
 
 $playerName = $_GET['playerName'];
 
-playerDrop($teamID, $playerName);
+playerDrop($userID, $username, $leagueID, $teamID, $playerName);
 
-header("Location: players.php");
+header("Refresh: 0.001, url=players.php");
 
 
 

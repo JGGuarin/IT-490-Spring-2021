@@ -132,6 +132,7 @@ $leagueName = $_SESSION["leagueName"];
               echo "<p class='proTeam'>";
               echo $teams;
               echo "</p>";
+              echo "<a href='dropPlayers.php?playerName=" . $names[$i] . "'><button type='button' name='droplayer'>Drop Player</button></a>";
               echo "</td>";
               echo "<td>";
               echo $fg;

@@ -21,8 +21,8 @@ $playerName = $_GET['playerName'];
 
 echo $playerName . "<br>";
 
-playerAdd($teamID, $playerName);
+playerAdd($userID, $username, $leagueID, $teamID, $playerName);
 
-header("Location: players.php");
+header("Refresh: 0.001, url=players.php");
 
 ?>

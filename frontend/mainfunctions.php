@@ -479,10 +479,62 @@ function createALeauge($leagueName, $userID, $username, $memberArray){
     return $leagueID;
 }
 
+function doesPlayerExist($playerName){
+    global $db, $t;
+
+    $s = "SELECT * FROM PlayerImport WHERE FullName = '$playerName'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
+
+    if ($num == 0){
+        return false;
+    }
+
+    return true;
+}
+
+function draftATeam($teamName, $leagueID, $playerArray){
+    global $db, $t;
+
+    $teamName = sanitizeInput($teamName);
+    $s = "select TeamID from Team where LeagueID='$leagueID' and TeamName='$teamName'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
+
+    if ($num == 0){
+        echo "<script>alert('That team does not exist!')</script>";
+        return false;
+    }
+
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+
+    $teamID = $r["TeamID"];
+
+    foreach($playerArray as $player){
+        $player = sanitizeInput($player);
+        if (doesPlayerExist($player)){
+            if(displayAvailability($player) == "Available"){
+                $s = "UPDATE Player SET TeamID='$teamID' WHERE FullName='$player'";
+                ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+                echo "<script>alert('Team drafted!')</script>";
+            }
+            else{
+                echo "<script>alert('$player is already on a team!')</script>";
+            }
+        }
+        else{
+            echo "<script>alert('One of the players does not exist!')</script>";
+            return false;
+        }
+    }
+
+    return $teamID;
+}
+
 function isPlayerOnTeam($teamID, $playerName){
     global $db, $t;
 
-    $s = "select * from Player where TeamID = '$teamID'";
+    $s = "select * from Player where TeamID = '$teamID' and FullName='$playerName'";
 
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
     $num = mysqli_num_rows($t);
@@ -503,28 +555,42 @@ function isPlayerOnTeam($teamID, $playerName){
 
 //ADD Player
 //TODO: If loop to check if maximum roster limit will be broken
-function playerAdd ($teamID, $playerName) {
+function playerAdd ($userID, $username, $leagueID, $teamID, $playerName) {
     global $db, $t;
   
-    $playername = sanitizeInput($playerName);
-    $s = "UPDATE Player SET TeamID='$teamID' WHERE FullName='$playername'";
-  
+    $playerName = sanitizeInput($playerName);
+    $s = "UPDATE Player SET TeamID='$teamID' WHERE FullName='$playerName'";
     ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
-    //$num = mysqli_num_rows($t);
+
+
+    $type = "League member updated their roster";
+    $detail = "$username added $playerName to their team";
+    $s = "INSERT INTO UserHistory VALUES ('$userID', '$username', '$teamID', '$leagueID', NOW(), '$type', '$detail')";
+    ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+
+    echo "<script>alert('Player added!')</script>";
+    return true;
 }
  
 
 //DROP Player
 //TODO: If loop to check if minimum roster limit will be broken
 //TODO: Update the team names
-function playerDrop ($teamID, $playerName) {
+function playerDrop ($userID, $username, $leagueID, $teamID, $playerName) {
     global $db, $t;
 
     $playerName = sanitizeInput($playerName);
     $s = "UPDATE Player SET TeamID=0 WHERE TeamID='$teamID' AND FullName='$playerName'";
 
     ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
-    //$num = mysqli_num_rows($t);
+
+    $type = "League member updated their roster";
+    $detail = "$username dropped $playerName from their team";
+    $s = "INSERT INTO UserHistory VALUES ('$userID', '$username', '$teamID', '$leagueID', NOW(), '$type', '$detail')";
+    ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+
+    echo "<script>alert('Player dropped!')</script>";
+    return true;
 }
 
 function sanitizeInput($fieldname){
