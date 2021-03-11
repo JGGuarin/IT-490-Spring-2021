@@ -91,7 +91,7 @@ $leagueName = $_SESSION["leagueName"];
                 <option value="">Select Pro Team</option>
 
                 <?php                 
-                  $teams = displayPlayersTeams();
+                  $teams = displayPlayersUniqueTeams();
                   foreach ($teams as $team){
                     echo "<option value='$team'>$team</option>";
                   }

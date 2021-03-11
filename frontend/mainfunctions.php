@@ -286,6 +286,24 @@ function displayPlayersTeams(){
     return $teams;
 }
 
+function displayPlayersUniqueTeams(){
+    global $db, $t;
+
+    $s = "SELECT * FROM PlayerImport";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
+
+    $teams = array();
+
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $team = $r["Team"];
+        if (!in_array($team, $teams)){
+            array_push($teams, $team);
+        }
+    }
+    return $teams;
+}
+
 function displayPlayersInfo($stat){
     global $db, $t;
 
@@ -494,8 +512,6 @@ function createALeauge($leagueName, $userID, $username, $memberArray){
 
         $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
         $memberUserID = $r["UserID"];
-
-        echo "userID: $memberUserID";
 
         $s = "INSERT INTO Team(`LeagueID`, `UserID`, `TeamName`) VALUES ('$leagueID', '$memberUserID', 'Team $member')";
         ($t = mysqli_query($db, $s)) or die(mysqli_error($db));

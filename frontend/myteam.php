@@ -128,7 +128,7 @@ $leagueName = $_SESSION["leagueName"];
               echo $positions;
               echo "</td>";
               echo "<td>";
-              echo $names[$i];
+              echo "<a href='player.php?playerName=" . $names[$i] . "'>$names[$i]</a>";
               echo "<p class='proTeam'>";
               echo $teams;
               echo "</p>";
