@@ -667,7 +667,7 @@ function request ($from, $to) {
         $num = mysqli_num_rows($t);
 
         if ($num == 0){
-          $s = "INSERT INTO `relation` (`from`, `to`, `status`) VALUES ('$from','$to','P')";
+          $s = "INSERT INTO `Relation` (`from`, `to`, `status`) VALUES ('$from','$to','P')";
           ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
           return "Friend Request Sent";
         }
@@ -702,7 +702,7 @@ function acceptReq ($from, $to) {
 
     /*
     //GET OUTGOING FRIEND REQUESTS (FROM USER TO OTHER PEOPLE)
-    $s = "SELECT * FROM `relation` WHERE `status`='P' AND `from`='$username'";
+    $s = "SELECT * FROM `Relation` WHERE `status`='P' AND `from`='$username'";
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
     
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
