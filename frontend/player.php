@@ -72,21 +72,20 @@ $playerName = sanitizeInput($playerName);
         <h4><b><?php echo $playerName ?></b></h4>
         <p> <?php 
                 echo "Pro Team: " . displayTeamPlayersInfo('Team',$playerName) . 
-                "<br> Eligible Positions: " . displayTeamPlayersInfo('Pos',$playerName) .
-                "<br> Team Manager: " . displayTeamPlayersInfo('Team',$playerName) . "<br><br><br>";
+                "<br> Eligible Positions: " . displayTeamPlayersInfo('Pos',$playerName) . "<br>Status: " .
 
                 $availability = displayAvailability($playerName);
 
                 if ($availability == "Available"){
                     
-                    echo "<a href='addPlayers.php?playerName=" . $playerName . "'><button type='button' name='addPlayer'>Add Player</button></a>
+                    echo "<a href='addPlayers.php?playerName=" . $playerName . "'><br><br><button type='button' name='addPlayer'>Add Player</button></a>
                               </td>";
                   }elseif (isPlayerOnTeam($teamID, $playerName)){
-                    echo "<a href='dropPlayers.php?playerName=" . $playerName . "'><button type='button' name='droplayer'>Drop Player</button></a>
+                    echo "<a href='dropPlayers.php?playerName=" . $playerName . "'><br><br><button type='button' name='droplayer'>Drop Player</button></a>
                               </td>";
                   }
                   else{
-                    echo "Player not available to be drafted";
+                    echo "Player is already part of a team. They not available to be drafted at this time.";
                   }
 
             ?></p>
@@ -198,13 +197,24 @@ $playerName = sanitizeInput($playerName);
     <div class="container">
 
       <h2>TRANSACTIONS </h2>
-      <table class="collapsed team" id="playerTable" width=100%>
-        <tr class="header">
-          <th scope="col">DATE</th>
-          <th scope="col">TYPE</th>
-          <th scope="col">DETAIL</th>
+      <table class="collapsed" width=100%>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Detail</th>
         </tr>
-                    
+        <?php
+          $historyInfo = displayPlayerHistory($leagueID, $playerName);
+          echo "<tr>";
+          for ($i=0;$i<count($historyInfo);$i++){
+            if ($i%3 == 0){
+              echo "</tr></td>";
+            } 
+            echo "<td>$historyInfo[$i]</td>"; 
+  
+          }
+          echo "</tr>";
+        ?>
       </table>
     </div>
   </div>

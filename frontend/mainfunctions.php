@@ -633,10 +633,10 @@ function request ($from, $to) {
     
     return "Already Friends";
 
-  }
+}
 
-  //ACCEPT FRIEND REQUEST
-  function acceptReq ($from, $to) {
+//ACCEPT FRIEND REQUEST
+function acceptReq ($from, $to) {
     global $db, $t;
     //UPGRADE STATUS TO "F"RIENDS
     $s = "UPDATE `relation` SET `status`='F' WHERE `status`='P' AND `from`='$from' AND `to`='$to'";
@@ -649,7 +649,7 @@ function request ($from, $to) {
     ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
     return "Friend Request Accepted";
     
-  }
+}
 
   //NEEDS WORK: GET FRIEND REQUESTS
   //TODO: Display the results
@@ -682,7 +682,7 @@ function request ($from, $to) {
     
     return $r["from"];
     }
-  }
+}
 
   //NEEDS WORK: GET FRIENDS
   //TODO: Display the results
@@ -717,7 +717,48 @@ function request ($from, $to) {
         }
     }
     }
-  }
+}
 
+
+
+
+function displayLeagueHistory($leagueID){
+    global $db, $t;
+
+    $s = "SELECT * FROM UserHistory WHERE LeagueID = '$leagueID'";
+    ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+
+    $historyArray = array();
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $date = $r['Date'];
+        $type = $r['Type'];
+        $detail = $r['Detail'];
+
+        array_push($historyArray, $date, $type, $detail);
+    }
+
+    return $historyArray;
+}
+
+function displayPlayerHistory($leagueID, $playerName){
+    global $db, $t;
+
+    $s = "SELECT * FROM UserHistory WHERE LeagueID = '$leagueID'";
+    ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+
+    $historyArray = array();
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $date = $r['Date'];
+        $type = $r['Type'];
+        $detail = $r['Detail'];
+
+        
+        if (strpos($detail, $playerName)){
+            array_push($historyArray, $date, $type, $detail);
+        }
+    }
+
+    return $historyArray;
+}
 
 ?>

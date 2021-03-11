@@ -117,18 +117,18 @@ $leagueName = $_SESSION["leagueName"];
           <th>Type</th>
           <th>Detail</th>
         </tr>
-        <tr>
-          <th>March 5, 2021 11:33 AM</th>
-          <th>League member updated their roster</th>
-          <th>{username} added Kevin Durant to their team</th>
-        </tr>
-        <tr>
-          <th>March 6, 2021 4:32 PM</th>
-          <th>League member updated their roster</th>
-          <th>{username} dropped Steph Curry from their team</th>
-        </tr>
-        <tr>
-        </tr>
+        <?php
+          $historyInfo = displayLeagueHistory($leagueID);
+          echo "<tr>";
+          for ($i=0;$i<count($historyInfo);$i++){
+            if ($i%3 == 0){
+              echo "</tr></td>";
+            } 
+            echo "<td>$historyInfo[$i]</td>"; 
+  
+          }
+          echo "</tr>";
+        ?>
       </table>
     </div>
   </div>
