@@ -1,30 +1,60 @@
 #!/usr/bin/php
 <?php
-require_once('path.inc');
-require_once('get_host_info.inc');
-require_once('rabbitMQLib.inc');
+include('path.inc');
+include('get_host_info.inc');
+include('rabbitMQLib.inc');
+include('logger.php'); // "Importing" logger.php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
-$client = new rabbitMQClient("testRabbitMQ.ini","testServer");
-if (isset($argv[1]))
-{
-  $msg = $argv[1];
+function authentication($username, $password){
+
+  $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "login";
+  }
+
+  $request = array();
+  $request['type'] = "login";
+  //$request['username'] = $username;
+  //$request['password'] = $password;
+  $request['username'] = $username;
+  $request['password'] = $password;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+
 }
-else
-{
-  $msg = "test message";
+
+function getUserId($username, $password){
+  $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "get user id";
+  }
+
+  $request = array();
+  $request['type'] = "getUserID";
+  //$request['username'] = $username;
+  //$request['password'] = $password;
+  $request['username'] = $username;
+  $request['password'] = $password;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+
 }
-
-$request = array();
-$request['type'] = "Login";
-$request['username'] = "steve";
-$request['password'] = "password";
-$request['message'] = $msg;
-$response = $client->send_request($request);
-//$response = $client->publish($request);
-
-echo "client received response: ".PHP_EOL;
-print_r($response);
-echo "\n\n";
-
-echo $argv[0]." END".PHP_EOL;
-
