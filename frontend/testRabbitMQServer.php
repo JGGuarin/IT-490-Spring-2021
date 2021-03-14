@@ -26,12 +26,15 @@ function authentication($username,$password)
 
     if ($result -> num_rows == 0){
       echo "Incorrect credentials";
+        
+        $mysqli -> close();
       return false;
     }else{
           $pass = $user['Password'];
           print_r($user);
           echo "pass: $pass";
-
+        
+          $mysqli -> close();
           return true;
       }
       /*$userInfo['username'] = $user['Username'];
@@ -66,6 +69,7 @@ function getUserID($username,$password)
 
     echo "UserID: $userID";
 
+    $mysqli -> close();
     return $userID;
     exit();
 }
