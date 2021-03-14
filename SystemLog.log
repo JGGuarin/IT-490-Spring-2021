@@ -55,3 +55,11 @@ SERVER LOGGING HAS BEGUN (at Tue, 09 Mar 2021 21:27:05 -0500)
 
 /home/jayguarz/git/rabbitmqphp_example/mysqlconnect.php on line 20: "mysqlconnect BEGIN\n"
 
+
+************************************************************
+CLIENT LOGGING HAS BEGUN (at Sat, 13 Mar 2021 17:27:29 -0500)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/testRabbitMQClient.php on line 27: {"type":"Login","username":"steve","password":"password","message":"test message"}
+************************************************************
+CLIENT LOGGING HAS ENDED (at Sat, 13 Mar 2021 17:27:29 -0500)
+************************************************************
