@@ -5,6 +5,7 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 require_once('logger.php'); // "Importing" logger.php
 
+/*
 // Be mindful of which server you're trying to be a client of
 $client = new rabbitMQClient("testRabbitMQ.ini","apiServer");
 
@@ -35,4 +36,52 @@ print_r($response);
 echo "\n\n";
 
 echo $argv[0]." END".PHP_EOL;
+*/
 
+function ApiScheduleGrab()
+{
+  $client = new rabbitMQClient("testRabbitMQ.ini","apiServer");
+
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "ApiScheduleGrab";
+  }
+
+  $request = array();
+  $request['type'] = "ApiScheduleGrab";
+  $response = $client->send_request($request);
+
+  if($response)
+  {
+    echo "Schedule grab successful!".PHP_EOL;
+  }
+}
+
+function ApiStatlineGrab()
+{
+  $client = new rabbitMQClient("testRabbitMQ.ini","apiServer");
+
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "ApiStatlineGrab";
+  }
+
+  $request = array();
+  $request['type'] = "ApiStatlineGrab";
+  $response = $client->send_request($request);
+
+  if($response)
+  {
+    echo "Statline grab successful!".PHP_EOL;
+  }
+}
+
+?>
