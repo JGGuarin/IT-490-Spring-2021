@@ -33,3 +33,18 @@ CLIENT LOGGING HAS BEGUN (at Thu, 11 Mar 2021 11:43:02 -0500)
 ************************************************************
 CLIENT LOGGING HAS ENDED (at Thu, 11 Mar 2021 11:43:02 -0500)
 ************************************************************
+
+************************************************************
+SERVER LOGGING HAS BEGUN (at Sun, 14 Mar 2021 17:27:28 -0400)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/APIServer.php on line 9: "Test log."
+
+
+************************************************************
+CLIENT LOGGING HAS BEGUN (at Sun, 14 Mar 2021 17:27:47 -0400)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/testRabbitMQClient.php on line 30: {"type":"Login","username":"steve","password":"password","message":"test message"}
+/home/jayguarz/git/rabbitmqphp_example/testRabbitMQClient.php on line 31: This is a test. (errno: 256)
+************************************************************
+CLIENT LOGGING HAS ENDED (at Sun, 14 Mar 2021 17:27:47 -0400)
+************************************************************
