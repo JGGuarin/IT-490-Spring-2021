@@ -9,8 +9,8 @@ require_once('logger.php');
 // TO BE EXECUTED
 /////////////////
 
-$logger = new LoggerServer();
-$logger->log("Test log.");
+//$logger = new LoggerServer();
+//$logger->log("Test log.");
 
 $server = new rabbitMQServer("testRabbitMQ.ini","apiServer");
 
@@ -49,15 +49,16 @@ function requestProcessor($request)
       return doValidate($request['sessionId']);
     */
     case "ApiScheduleGrab":
-      return ApiScheduleGrab();
+      return ApiScheduleGrab($request['apiArray']);
     case "ApiStatlineGrab":
-      return ApiStatlineGrab();
+      return ApiStatlineGrab($request['apiArray']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
 
-function ApiScheduleGrab()
+function ApiScheduleGrab($phpArray)
 {
+  /*
   $hostName = 'localhost';
   $user = 'root';
   $password = '';
@@ -94,7 +95,7 @@ function ApiScheduleGrab()
 
   $phpArray = json_decode($output, true);
   //print_r($phpArray);
-
+  */
 
   $gameID	= [];
   $homeNames = [];
@@ -124,7 +125,7 @@ function ApiScheduleGrab()
   return true;
 }
 
-function ApiStatlineGrab()
+function ApiStatlineGrab($phpArray)
 {
   $hostName = 'localhost';
   $user = 'root';
