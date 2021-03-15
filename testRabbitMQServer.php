@@ -26,6 +26,13 @@ function requestProcessor($request)
       return doLogin($request['username'],$request['password']);
     case "validate_session":
       return doValidate($request['sessionId']);
+    case "ApiScheduleGrab":
+      return "You tried to   schedule     grab ye?";
+    case "ApiStatlineGrab":
+      return "yOU TRRRREID TO SAT STUFF YE?";
+    default:
+      return false;
+
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }

@@ -12,7 +12,7 @@ require_once('rabbitMQLib.inc');
 //$logger = new LoggerServer();
 //$logger->log("Test log.");
 
-$server = new rabbitMQServer("testRabbitMQ.ini","apiServer");
+$server = new rabbitMQServer("testRabbitMQ.ini","testServer");
 
 echo "APIServer BEGIN".PHP_EOL;
 $server->process_requests('requestProcessor');
@@ -42,12 +42,6 @@ function requestProcessor($request)
   }
   switch ($request['type'])
   {
-    /*
-    case "login":
-      return doLogin($request['username'],$request['password']);
-    case "validate_session":
-      return doValidate($request['sessionId']);
-    */
     case "ApiScheduleGrab":
       return ApiScheduleGrab($request['apiArray']);
     case "ApiStatlineGrab":
@@ -58,7 +52,7 @@ function requestProcessor($request)
 
 function ApiScheduleGrab($phpArray)
 {
-  
+  /*
   $hostName = 'localhost';
   $user = 'root';
   $password = '';
@@ -74,28 +68,6 @@ function ApiScheduleGrab($phpArray)
   {
     echo "Successfully connected to database".PHP_EOL;
   }
-
-  /*
-  // create & initialize a curl session
-  $curl = curl_init();
-
-  // set our url with curl_setopt()
-  curl_setopt($curl, CURLOPT_URL, "http://api.sportradar.us/nba/trial/v7/en/games/2021/03/04/schedule.json?api_key=zj6an2w9yyafk9speye2espw");
-
-  // return the transfer as a string, also with setopt()
-  curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-  // curl_exec() executes the started curl session
-  // $output contains the output string
-  $output = curl_exec($curl);
-
-  // close curl resource to free up system resources
-  // (deletes the variable made by curl_init)
-  curl_close($curl);
-
-  $phpArray = json_decode($output, true);
-  //print_r($phpArray);
-  */
 
   $gameID	= [];
   $homeNames = [];
@@ -122,11 +94,13 @@ function ApiScheduleGrab($phpArray)
 
   $db->close();
   echo "ApiScheduleGrab() has been executed".PHP_EOL;
+  */
   return true;
 }
 
 function ApiStatlineGrab($phpArray)
 {
+  /*
   $hostName = 'localhost';
   $user = 'root';
   $password = '';
@@ -142,28 +116,6 @@ function ApiStatlineGrab($phpArray)
   {
     echo "Successfully connected to database".PHP_EOL;
   }
-
-  /*
-  // create & initialize a curl session
-  $curl = curl_init();
-
-  // set our url with curl_setopt()
-  curl_setopt($curl, CURLOPT_URL, "http://api.sportradar.us/nba/trial/v7/en/games/ed238559-8f25-40fd-96e0-07450e995186/summary.json?api_key=mkybkfpkm6pyabeyu89x5gft"); //change based on game id found through schedule call
-
-  // return the transfer as a string, also with setopt()
-  curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-  // curl_exec() executes the started curl session
-  // $output contains the output string
-  $output = curl_exec($curl);
-
-  // close curl resource to free up system resources
-  // (deletes the variable made by curl_init)
-  curl_close($curl);
-
-  $phpArray = json_decode($output, true);
-  //print_r($phpArray);
-  */
 
   $HomeBigArray = [];
   $var = 0;
@@ -267,6 +219,7 @@ function ApiStatlineGrab($phpArray)
 
   $db->close();
   echo "ApiStatlineGrab() has been executed".PHP_EOL;
+  */
   return true;
 }
 
