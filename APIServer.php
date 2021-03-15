@@ -13,9 +13,12 @@ require_once('rabbitMQLib.inc');
 //$logger->log("Test log.");
 
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
+$server2 = new rabbitMQServer("testRabbitMQ.ini","testServer");
+
 
 echo "APIServer BEGIN".PHP_EOL;
 $server->process_requests('requestProcessor');
+$server2->process_requests('requestProcessor');
 echo "APIServer END".PHP_EOL;
 exit();
 

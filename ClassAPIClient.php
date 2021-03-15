@@ -7,6 +7,7 @@ require_once('APIClass.php');
 
 $apiClient = new APIClient();
 $apiClient->ApiScheduleGrab();
-$apiClient->ApiStatlineGrab();
+$apiClient2 = new APIClient();
+$apiClient2->ApiStatlineGrab();
 
 ?>

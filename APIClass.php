@@ -11,7 +11,7 @@ class APIClient
 
     function __construct()
     {
-        $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+        $this->client = new rabbitMQClient("testRabbitMQ.ini","testServer");
         echo "API Client constructed.".PHP_EOL;
     }
 
@@ -50,7 +50,7 @@ class APIClient
         $request = array();
         $request['type'] = "ApiScheduleGrab";
         $request['apiArray'] = $phpArray;
-        $response = $client->send_request($request);
+        $response = $this->client->send_request($request);
 
         echo "This is right before a message schedule grab happening or not.".PHP_EOL;
 
@@ -87,7 +87,7 @@ class APIClient
         $request = array();
         $request['type'] = "ApiStatlineGrab";
         $request['apiArray'] = $phpArray;
-        $response = $client->send_request($request);
+        $response = $this->client->send_request($request);
 
         echo "This is right before a message about whether statline grab happened or not.".PHP_EOL;
 
