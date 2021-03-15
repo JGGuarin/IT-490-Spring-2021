@@ -3,7 +3,7 @@
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
-require_once('logger.php');
+//require_once('logger.php');
 
 /////////////////
 // TO BE EXECUTED
@@ -58,7 +58,7 @@ function requestProcessor($request)
 
 function ApiScheduleGrab($phpArray)
 {
-  /*
+  
   $hostName = 'localhost';
   $user = 'root';
   $password = '';
@@ -75,6 +75,7 @@ function ApiScheduleGrab($phpArray)
     echo "Successfully connected to database".PHP_EOL;
   }
 
+  /*
   // create & initialize a curl session
   $curl = curl_init();
 
@@ -91,7 +92,6 @@ function ApiScheduleGrab($phpArray)
   // close curl resource to free up system resources
   // (deletes the variable made by curl_init)
   curl_close($curl);
-
 
   $phpArray = json_decode($output, true);
   //print_r($phpArray);
@@ -143,7 +143,7 @@ function ApiStatlineGrab($phpArray)
     echo "Successfully connected to database".PHP_EOL;
   }
 
-
+  /*
   // create & initialize a curl session
   $curl = curl_init();
 
@@ -161,10 +161,9 @@ function ApiStatlineGrab($phpArray)
   // (deletes the variable made by curl_init)
   curl_close($curl);
 
-
   $phpArray = json_decode($output, true);
   //print_r($phpArray);
-
+  */
 
   $HomeBigArray = [];
   $var = 0;

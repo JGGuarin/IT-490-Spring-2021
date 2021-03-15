@@ -51,22 +51,6 @@ function ApiScheduleGrab()
     $msg = "ApiScheduleGrab";
   }
 
-  $hostName = 'localhost';
-  $user = 'root';
-  $password = '';
-  $databaseName = 'FantasySports';
-  $db = new mysqli($hostName,$user,$password,$databaseName);
-
-  if ($db->errno != 0)
-  {
-    echo "Failed to connect to database: ".$db->error.PHP_EOL;
-    exit(0);
-  }
-  else
-  {
-    echo "Successfully connected to database".PHP_EOL;
-  }
-
   // create & initialize a curl session
   $curl = curl_init();
 
@@ -100,31 +84,6 @@ function ApiScheduleGrab()
 function ApiStatlineGrab()
 {
   $client = new rabbitMQClient("testRabbitMQ.ini","apiServer");
-
-  if (isset($argv[1]))
-  {
-    $msg = $argv[1];
-  }
-  else
-  {
-    $msg = "ApiStatlineGrab";
-  }
-
-  $hostName = 'localhost';
-  $user = 'root';
-  $password = '';
-  $databaseName = 'FantasySports';
-  $db = new mysqli($hostName,$user,$password,$databaseName);  
-
-  if ($db->errno != 0)
-  {
-    echo "Failed to connect to database: ".$db->error.PHP_EOL;
-    exit(0);
-  }
-  else
-  {
-    echo "Successfully connected to database".PHP_EOL;
-  }
 
   // create & initialize a curl session
   $curl = curl_init();
