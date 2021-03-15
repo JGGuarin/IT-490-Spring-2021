@@ -12,7 +12,7 @@ require_once('rabbitMQLib.inc');
 //$logger = new LoggerServer();
 //$logger->log("Test log.");
 
-$server = new rabbitMQServer("testRabbitMQ.ini","testServer");
+$server = new rabbitMQServer("testRabbitMQ.ini","apiServer");
 
 echo "APIServer BEGIN".PHP_EOL;
 $server->process_requests('requestProcessor');
@@ -44,7 +44,6 @@ function requestProcessor($request)
 
 function ApiScheduleGrab($phpArray)
 {
-  /*
   $hostName = 'localhost';
   $user = 'root';
   $password = '';
@@ -86,13 +85,12 @@ function ApiScheduleGrab($phpArray)
 
   $db->close();
   echo "ApiScheduleGrab() has been executed".PHP_EOL;
-  */
+
   return true;
 }
 
 function ApiStatlineGrab($phpArray)
 {
-  /*
   $hostName = 'localhost';
   $user = 'root';
   $password = '';
@@ -211,7 +209,7 @@ function ApiStatlineGrab($phpArray)
 
   $db->close();
   echo "ApiStatlineGrab() has been executed".PHP_EOL;
-  */
+
   return true;
 }
 
