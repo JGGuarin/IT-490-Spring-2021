@@ -40,7 +40,7 @@ echo $argv[0]." END".PHP_EOL;
 
 function ApiScheduleGrab()
 {
-  $client = new rabbitMQClient("testRabbitMQ.ini","apiServer");
+  $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
 
   if (isset($argv[1]))
   {
@@ -83,7 +83,7 @@ function ApiScheduleGrab()
 
 function ApiStatlineGrab()
 {
-  $client = new rabbitMQClient("testRabbitMQ.ini","apiServer");
+  $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
 
   // create & initialize a curl session
   $curl = curl_init();
@@ -115,5 +115,8 @@ function ApiStatlineGrab()
     echo "Statline grab successful!".PHP_EOL;
   }
 }
+
+ApiScheduleGrab();
+ApiStatlineGrab();
 
 ?>

@@ -23,14 +23,6 @@ exit();
 // FUNCTION DEFINITIONS
 ///////////////////////
 
-function doLogin($username,$password)
-{
-    // lookup username in databas
-    // check password
-    return true;
-    //return false if not valid
-}
-
 function requestProcessor($request)
 {
   echo "Received API request".PHP_EOL;
