@@ -116,6 +116,10 @@ function ApiStatlineGrab()
   }
 }
 
+$logger = new LoggerClient();
+set_error_handler(array($logger,'errorLog'));
+$logger->log("Test log.");
+
 ApiScheduleGrab();
 //ApiStatlineGrab();
 

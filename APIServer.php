@@ -3,14 +3,15 @@
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
-//require_once('logger.php');
+require_once('logger.php');
 
 /////////////////
 // TO BE EXECUTED
 /////////////////
 
-//$logger = new LoggerServer();
-//$logger->log("Test log.");
+$logger = new LoggerClient();
+set_error_handler(array($logger,'errorLog'));
+$logger->log("Test log.");
 
 $server = new rabbitMQServer("testRabbitMQ.ini","apiServer");
 
