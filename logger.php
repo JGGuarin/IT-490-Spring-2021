@@ -18,7 +18,7 @@ class LoggerClient
         fwrite($this->logFile, "CLIENT LOGGING HAS BEGUN (at ".date(DATE_RFC2822).")".PHP_EOL);
         fwrite($this->logFile, "************************************************************".PHP_EOL);
 
-        $loggerClient = new rabbitMQClient("testRabbitMQ.ini","loggerServer");
+        //$loggerClient = new rabbitMQClient("testRabbitMQ.ini","loggerServer");
         echo "loggerClient BEGIN".PHP_EOL;
     }
 
@@ -73,7 +73,7 @@ class LoggerServer
         
         $loggerServer = new rabbitMQServer("testRabbitMQ.ini","loggerServer");
         echo "loggerServer BEGIN".PHP_EOL;
-        $loggerServer->process_requests(array($this,'requestProcessor'));
+        //$loggerServer->process_requests(array($this,'requestProcessor'));
     }
 
     function log($data)
