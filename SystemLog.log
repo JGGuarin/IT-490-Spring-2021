@@ -48,3 +48,65 @@ CLIENT LOGGING HAS BEGUN (at Sun, 14 Mar 2021 17:27:47 -0400)
 ************************************************************
 CLIENT LOGGING HAS ENDED (at Sun, 14 Mar 2021 17:27:47 -0400)
 ************************************************************
+
+************************************************************
+CLIENT LOGGING HAS BEGUN (at Mon, 15 Mar 2021 21:30:33 -0400)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/APIClient.php on line 121: "Test log."
+************************************************************
+CLIENT LOGGING HAS ENDED (at Mon, 15 Mar 2021 21:30:33 -0400)
+************************************************************
+
+************************************************************
+CLIENT LOGGING HAS BEGUN (at Mon, 15 Mar 2021 21:35:54 -0400)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/APIClient.php on line 121: "Test log."
+/home/jayguarz/git/rabbitmqphp_example/APIClient.php on line 122: This is a test. (errno: 256)
+************************************************************
+CLIENT LOGGING HAS ENDED (at Mon, 15 Mar 2021 21:35:54 -0400)
+************************************************************
+
+************************************************************
+CLIENT LOGGING HAS BEGUN (at Mon, 15 Mar 2021 21:38:28 -0400)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/APIClient.php on line 121: "Test log."
+/home/jayguarz/git/rabbitmqphp_example/APIClient.php on line 122: This is a test. (errno: 256)
+************************************************************
+CLIENT LOGGING HAS ENDED (at Mon, 15 Mar 2021 21:38:29 -0400)
+************************************************************
+
+************************************************************
+CLIENT LOGGING HAS BEGUN (at Mon, 15 Mar 2021 21:45:35 -0400)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/APIServer.php on line 14: "Test log."
+
+************************************************************
+CLIENT LOGGING HAS BEGUN (at Mon, 15 Mar 2021 21:45:47 -0400)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/APIClient.php on line 121: "Test log."
+/home/jayguarz/git/rabbitmqphp_example/APIClient.php on line 122: This is a test. (errno: 256)
+/home/jayguarz/git/rabbitmqphp_example/rabbitMQLib.inc on line 215: Function AMQPQueue::declare() is deprecated. (errno: 8192)
+/home/jayguarz/git/rabbitmqphp_example/APIClient.php on line 124: null
+************************************************************
+CLIENT LOGGING HAS ENDED (at Mon, 15 Mar 2021 21:45:47 -0400)
+************************************************************
+
+************************************************************
+CLIENT LOGGING HAS BEGUN (at Mon, 15 Mar 2021 21:48:12 -0400)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/APIClient.php on line 123: "Test log."
+/home/jayguarz/git/rabbitmqphp_example/APIClient.php on line 124: This is a test. (errno: 256)
+/home/jayguarz/git/rabbitmqphp_example/rabbitMQLib.inc on line 215: Function AMQPQueue::declare() is deprecated. (errno: 8192)
+/home/jayguarz/git/rabbitmqphp_example/APIClient.php on line 126: "Schedule grab successful!\n"
+************************************************************
+CLIENT LOGGING HAS ENDED (at Mon, 15 Mar 2021 21:48:12 -0400)
+************************************************************
+
+************************************************************
+CLIENT LOGGING HAS BEGUN (at Mon, 15 Mar 2021 21:49:58 -0400)
+************************************************************
+/home/jayguarz/git/rabbitmqphp_example/APIClient.php on line 123: "Test log."
+/home/jayguarz/git/rabbitmqphp_example/APIClient.php on line 124: This is a test. (errno: 256)
+************************************************************
+CLIENT LOGGING HAS ENDED (at Mon, 15 Mar 2021 21:49:58 -0400)
+************************************************************

@@ -85,6 +85,7 @@ function ApiScheduleGrab($phpArray)
   }
 
   $db->close();
+  
   echo "ApiScheduleGrab() has been executed".PHP_EOL;
 
   return true;

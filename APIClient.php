@@ -78,6 +78,7 @@ function ApiScheduleGrab()
   if($response)
   {
     echo "Schedule grab successful!".PHP_EOL;
+    return "Schedule grab successful!".PHP_EOL;
   }
 }
 
@@ -113,14 +114,19 @@ function ApiStatlineGrab()
   if($response)
   {
     echo "Statline grab successful!".PHP_EOL;
+    return "Statline grab successful!".PHP_EOL;
   }
 }
 
 $logger = new LoggerClient();
 set_error_handler(array($logger,'errorLog'));
 $logger->log("Test log.");
+trigger_error("This is a test", E_USER_ERROR);
 
-ApiScheduleGrab();
+$logger->log(ApiScheduleGrab());
+
+
+//ApiScheduleGrab();
 //ApiStatlineGrab();
 
 ?>
