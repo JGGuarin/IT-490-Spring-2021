@@ -43,7 +43,7 @@ class rabbitMQServer
     {
       return;
     }
-    $this->conn_queue->ack($msg->getDeliveryTag());
+    $this->conn_queue->ack($msg->getDeliveryTag(), 1);
 		try
 		{
 			if ($msg->getReplyTo())
@@ -176,7 +176,7 @@ class rabbitMQClient
 		  echo  "unknown uid\n";
 		  return true;
 		}
-    $this->conn_queue->ack($response->getDeliveryTag());
+    $this->conn_queue->ack($response->getDeliveryTag(), 1);
 		$body = $response->getBody();
 		$payload = json_decode($body, true);
 		if (!(isset($payload)))
@@ -224,7 +224,7 @@ class rabbitMQClient
 			$callback_queue->consume(array($this,'process_response'));
 
 			$response = $this->response_queue[$uid];
-			unset($this->response_queue[$uid]);
+			unset($this -> response_queue[$uid]);
 			return $response;
 		}
 		catch(Exception $e)
