@@ -1,0 +1,13 @@
+#!/bin/bash
+
+
+#arg 1 = VersionName
+#arg 2 = SourceFolder
+
+#part1: Zip Folder
+cd /git/Versions ;
+zip -r $1 $2 ; 
+
+#part2: Send File using SCP
+#TODO: Create copies of this file for each system
+scp /git/Versions/$1.zip r3drum@25.57.154.22:/home/r3drum/Versions ;

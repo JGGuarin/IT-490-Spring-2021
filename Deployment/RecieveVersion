@@ -1,0 +1,9 @@
+#!/bin/bash
+#arg 1 = Version to grab
+#arg 2 = Directory to Unzip Version
+
+#part 1: SCP the new version
+scp r3drum@25.57.154.22:/home/r3drum/Versions/$1.zip $2
+
+#part 2: Unzip new version to correct directory
+unzip $2/$1 -d $2;
