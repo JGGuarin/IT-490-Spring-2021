@@ -102,22 +102,17 @@ function getUserInfo($username, $password){
     if ($result -> num_rows == 0){
       echo "No friends yet";
     }else{
-
     $toUsernames = array();
     $fromUsernames = array();
     
     while ($result -> fetch_assoc()){
         $toUsername = $r["to"];
         $fromUsername = $r["from"];
-
         array_push($toUsernames, $toUsername);
         array_push($fromUsernames, $fromUsername);
-
     }
-
     $userInfo['friendsToUsername'] = $toUsernames;
     $userInfo['friendsForUsername'] = $fromUsernames;
-
       for ($i=0; $i < count($toUsernames) ; $i++){
           if ($toUsernames[$i]== $username){
               echo $fromUsernames[$i] . "<br>";
@@ -316,7 +311,6 @@ function displayTeamPlayersInfo($infoNeeded, $fullName){
       $info = $r["$infoNeeded"];
       array_push($infoNeededArr, $info);
   }
-
   // print_r($infoNeededArr);
   */
 
@@ -325,6 +319,103 @@ function displayTeamPlayersInfo($infoNeeded, $fullName){
   return $info;
 }
 
+function getCreatorUsername($leagueID){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("select CreatorName from League where LeagueID='$leagueID'");
+
+  $r = $result -> fetch_assoc();
+
+  $creatorUsername = $r["CreatorName"];
+
+  echo $creatorUsername;
+
+  $mysqli -> close();
+
+  return $creatorUsername;
+}
+
+function displayLeagueMembers($leagueID){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("SELECT * FROM Team where LeagueID = '$leagueID'");
+  
+
+  $userIDs = array();
+  while($r = $result -> fetch_assoc()){
+      $userID = $r["UserID"];
+      array_push($userIDs, $userID);
+  }
+
+  $usernames = array();
+  foreach ($userIDs as $userID){
+    $result = $mysqli ->query("SELECT Username FROM Users where UserID = '$userID'");
+
+    while($r = $result -> fetch_assoc()){
+        $username = $r["Username"];
+        array_push($usernames, $username);
+    }
+  }
+
+  $mysqli -> close();
+
+
+  return $usernames;
+
+}
+
+function getLeagueMemberTeamName($username, $leagueID){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("select UserID from Users where Username = '$username'");
+
+  $r = $result -> fetch_assoc();
+
+  $userID = $r['UserID'];
+
+  $teamID = getTeamID($userID, $leagueID);
+
+  $teamName = getTeamName($teamID);
+
+  $mysqli -> close();
+
+  return $teamName;
+}
+
+function displayLeagueHistory($leagueID){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("SELECT * FROM UserHistory WHERE LeagueID = '$leagueID'");
+
+  $historyArray = array();
+  while($r = $result -> fetch_assoc()){
+      $date = $r['Date'];
+      $type = $r['Type'];
+      $detail = $r['Detail'];
+
+      array_push($historyArray, $date, $type, $detail);
+  }
+
+  $mysqli -> close();
+
+  return $historyArray;
+}
 
 
 function requestProcessor($request)
@@ -361,6 +452,14 @@ function requestProcessor($request)
       return displayTeamPlayersNames($request['teamID']);
     case "displayTeamPlayersInfo":
       return displayTeamPlayersInfo($request['infoNeeded'], $request['fullName']);
+    case "getCreatorUsername":
+      return getCreatorUsername($request['leagueID']);
+    case "displayLeagueMembers":
+      return displayLeagueMembers($request['leagueID']);
+    case "getLeagueMemberTeamName":
+      return getLeagueMemberTeamName($request['leagueMember'], $request['leagueID']);
+    case "displayLeagueHistory":
+      return displayLeagueHistory($request['leagueID']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
