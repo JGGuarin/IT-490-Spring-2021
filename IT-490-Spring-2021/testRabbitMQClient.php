@@ -10,7 +10,6 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
 /*
 $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
-
   if (isset($argv[1]))
   {
     $msg = $argv[1];
@@ -19,22 +18,17 @@ $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
   {
     $msg = "login";
   }
-
   $request = array();
   $request['type'] = "login";
   //$request['username'] = $username;
   //$request['password'] = $password;
-
   $username = 'mnunez';
   $password = '1234';
-
   $request['username'] = $username;
   $request['password'] = $password;
   $request['message'] = $msg;
   $response = $client->send_request($request);
-
   echo "response: $response";
-
 */
 
 
@@ -254,17 +248,14 @@ function displayTeamPlayersInfo($infoNeeded, $fullName){
   {
     $msg = "display team players info";
   }
-
   $request = array();
   $request['type'] = "displayTeamPlayersInfo";
   $request['infoNeeded'] = $infoNeeded;
   $request['fullName'] = $fullName;
   $request['message'] = $msg;
   $response = $client->send_request($request);
-
   return $response;
 }
-
 function displayTeamPlayersNames($teamID){
   $client = new rabbitMQClient("testRabbitMQ.ini","secondServer");
   
@@ -276,16 +267,99 @@ function displayTeamPlayersNames($teamID){
   {
     $msg = "display team players names";
   }
-
   $request = array();
   $request['type'] = "displayTeamPlayersNames";
   $request['teamID'] = $teamID;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+  return $response;
+}
+*/
+
+function getCreatorUsername($leagueID){
+  $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "get creator username";
+  }
+
+  $request = array();
+  $request['type'] = "getCreatorUsername";
+  $request['leagueID'] = $leagueID;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+
+}
+
+function displayLeagueMembers($leagueID){
+  $client = new rabbitMQClient("testRabbitMQ.ini","secondServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "display league members";
+  }
+
+  $request = array();
+  $request['type'] = "displayLeagueMembers";
+  $request['leagueID'] = $leagueID;
   $request['message'] = $msg;
   $response = $client->send_request($request);
 
   return $response;
 }
 
-*/
+function getLeagueMemberTeamName($leagueMember, $leagueID){
+  $client = new rabbitMQClient("testRabbitMQ.ini","thirdServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "get league member team name";
+  }
+
+  $request = array();
+  $request['type'] = "getLeagueMemberTeamName";
+  $request['leagueMember'] = $leagueMember;
+  $request['leagueID'] = $leagueID;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}
+
+function displayLeagueHistory($leagueID){
+  $client = new rabbitMQClient("testRabbitMQ.ini","fourthServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "display league history";
+  }
+
+  $request = array();
+  $request['type'] = "displayLeagueHistory";
+  $request['leagueID'] = $leagueID;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}
 
 ?>
