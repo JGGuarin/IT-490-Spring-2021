@@ -362,4 +362,85 @@ function displayLeagueHistory($leagueID){
   return $response;
 }
 
+function displayPlayersUniqueTeams(){
+  $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "display players unique teams";
+  }
+
+  $request = array();
+  $request['type'] = "displayPlayersUniqueTeams";
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}
+
+function displayPlayersPositions(){
+  $client = new rabbitMQClient("testRabbitMQ.ini","secondServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "display players positions";
+  }
+
+  $request = array();
+  $request['type'] = "displayPlayersPositions";
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+
+}
+
+function displayPlayersTeams(){
+  $client = new rabbitMQClient("testRabbitMQ.ini","thirdServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "display players teams";
+  }
+
+  $request = array();
+  $request['type'] = "displayPlayersTeams";
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}
+
+function displayPlayersNames(){
+  $client = new rabbitMQClient("testRabbitMQ.ini","fourthServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "display players names";
+  }
+
+  $request = array();
+  $request['type'] = "displayPlayersNames";
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}
+
 ?>

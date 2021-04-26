@@ -417,6 +417,92 @@ function displayLeagueHistory($leagueID){
   return $historyArray;
 }
 
+function displayPlayersUniqueTeams(){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("SELECT * FROM PlayerImport");
+
+  $teams = array();
+
+  while($r = $result -> fetch_assoc()){
+      $team = $r["Team"];
+      if (!in_array($team, $teams)){
+          array_push($teams, $team);
+      }
+  }
+
+  $mysqli -> close();
+
+  return $teams;
+}
+
+function displayPlayersPositions(){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("SELECT * FROM PlayerImport");
+
+  $positions = array();
+
+  while($r = $result -> fetch_assoc()){
+      $position = $r["Pos"];
+      array_push($positions, $position);
+  }
+  $mysqli -> close();
+
+  return $positions;
+}
+
+function displayPlayersTeams(){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("SELECT * FROM PlayerImport");
+
+  $teams = array();
+
+  while($r = $result -> fetch_assoc()){
+      $team = $r["Team"];
+      array_push($teams, $team);
+  }
+
+  $mysqli -> close();
+
+  return $teams;
+}
+
+function displayPlayersNames(){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("SELECT * FROM PlayerImport");
+
+  $names = array();
+
+  while($r = $result -> fetch_assoc()){
+      $name = $r["FullName"];
+      array_push($names, $name);
+  }
+
+  $mysqli -> close();
+
+  return $names;
+
+}
+
 
 function requestProcessor($request)
 {
@@ -460,6 +546,14 @@ function requestProcessor($request)
       return getLeagueMemberTeamName($request['leagueMember'], $request['leagueID']);
     case "displayLeagueHistory":
       return displayLeagueHistory($request['leagueID']);
+    case "displayPlayersUniqueTeams":
+      return displayPlayersUniqueTeams();
+    case "displayPlayersPositions":
+      return displayPlayersPositions();
+    case "displayPlayersTeams":
+      return displayPlayersTeams();
+    case "displayPlayersNames":
+      return displayPlayersNames();
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
