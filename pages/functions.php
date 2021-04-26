@@ -1,5 +1,6 @@
 <?php
 
+
 function displayTeamPlayersNames($teamID){
     global $db, $t;
 
@@ -33,10 +34,74 @@ function displayTeamPlayersInfo($infoNeeded, $fullName){
         $info = $r["$infoNeeded"];
         array_push($infoNeededArr, $info);
     }
-
     // print_r($infoNeededArr);
     */
     return $info;
 }
+
+function displayPlayersInfo($stat){
+    global $db, $t;
+
+    $s = "SELECT $stat FROM PlayerImport";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
+
+    $stats = array();
+
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $stat1 = $r["$stat"];
+       
+        array_push($stats, $stat1);
+
+    }
+    return $stats;
+}
+
+function displayAvailability($playerName){
+    global $db, $t;
+
+    $s = "select * from Player where FullName = '$playerName'";
+
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
+
+    //if no rows are returned, the user doesnt exist
+    if ($num == 0){
+        return "Available";
+    }
+
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $teamID = $r['TeamID'];
+    }
+
+    if ($teamID == 0){
+        return "Available";
+    }
+    
+    return "On Roster";
+}
+
+function isPlayerOnTeam($teamID, $playerName){
+    global $db, $t;
+
+    $s = "select * from Player where TeamID = '$teamID' and FullName='$playerName'";
+
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+    $num = mysqli_num_rows($t);
+
+    //if no rows are returned, the player is not on their team
+    if ($num == 0){return false;}
+
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $teamID = $r['TeamID'];
+    }
+
+    if ($teamID == 0){
+        return false;
+    }
+    
+    return true;
+}
+
 
 ?>
