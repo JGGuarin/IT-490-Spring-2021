@@ -103,5 +103,26 @@ function isPlayerOnTeam($teamID, $playerName){
     return true;
 }
 
+function displayPlayerHistory($leagueID, $playerName){
+    global $db, $t;
+
+    $s = "SELECT * FROM UserHistory WHERE LeagueID = '$leagueID'";
+    ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+
+    $historyArray = array();
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $date = $r['Date'];
+        $type = $r['Type'];
+        $detail = $r['Detail'];
+
+        
+        if (strpos($detail, $playerName)){
+            array_push($historyArray, $date, $type, $detail);
+        }
+    }
+
+    return $historyArray;
+}
+
 
 ?>
