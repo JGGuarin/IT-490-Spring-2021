@@ -124,5 +124,37 @@ function displayPlayerHistory($leagueID, $playerName){
     return $historyArray;
 }
 
+function playerAdd ($userID, $username, $leagueID, $teamID, $playerName) {
+    global $db, $t;
+  
+    $s = "UPDATE Player SET TeamID='$teamID' WHERE FullName='$playerName'";
+    ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+
+
+    $type = "League member updated their roster";
+    $detail = "$username added $playerName to their team";
+    $s = "INSERT INTO UserHistory VALUES ('$userID', '$username', '$teamID', '$leagueID', NOW(), '$type', '$detail')";
+    ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+
+    echo "<script>alert('Player added!')</script>";
+    return true;
+}
+
+function playerDrop ($userID, $username, $leagueID, $teamID, $playerName) {
+    global $db, $t;
+
+    $s = "UPDATE Player SET TeamID=0 WHERE TeamID='$teamID' AND FullName='$playerName'";
+
+    ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+
+    $type = "League member updated their roster";
+    $detail = "$username dropped $playerName from their team";
+    $s = "INSERT INTO UserHistory VALUES ('$userID', '$username', '$teamID', '$leagueID', NOW(), '$type', '$detail')";
+    ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
+
+    echo "<script>alert('Player dropped!')</script>";
+    return true;
+}
+
 
 ?>
