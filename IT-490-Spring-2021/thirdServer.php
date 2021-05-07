@@ -503,6 +503,35 @@ function displayPlayersNames(){
 
 }
 
+function displayGameLog($playerName){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("SELECT * FROM BBStatLine WHERE FullName = '$playerName'");
+
+  $gameLog = array();
+  while($r = $result -> fetch_assoc()){
+      $date = $r['StatDate'];
+      $points = $r['Point'];
+      $ast = $r['Assists'];
+      $reb = $r['Rebounds'];
+      $stls = $r['Steals'];
+      $blks = $r['Blocks'];
+      $fg = $r['FgPercent'];
+      $tp = $r['TptPercent'];
+      $ft = $r['FtPercent'];
+      
+      array_push($gameLog, $date, $points, $ast, $reb, $stls, $blks, $fg, $tp, $ft);
+  }
+
+  $mysqli -> close();
+
+  return $gameLog;
+}
+
 
 function requestProcessor($request)
 {
@@ -554,6 +583,8 @@ function requestProcessor($request)
       return displayPlayersTeams();
     case "displayPlayersNames":
       return displayPlayersNames();
+    case "displayGameLog":
+      return displayGameLog($request['playerName']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }

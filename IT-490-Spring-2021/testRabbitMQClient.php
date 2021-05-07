@@ -443,4 +443,25 @@ function displayPlayersNames(){
   return $response;
 }
 
+function displayGameLog($playerName){
+  $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "display game log";
+  }
+
+  $request = array();
+  $request['type'] = "displayGameLog";
+  $request['playerName'] = $playerName;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}
+
 ?>
