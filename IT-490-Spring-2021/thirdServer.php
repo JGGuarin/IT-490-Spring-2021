@@ -532,6 +532,43 @@ function displayGameLog($playerName){
   return $gameLog;
 }
 
+function dropPlayer($userID, $username, $leagueID, $teamID, $playerName){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("UPDATE Player SET TeamID=0 WHERE TeamID='$teamID' AND FullName='$playerName'");
+
+  $type = "League member updated their roster";
+  $detail = "$username dropped $playerName from their team";
+  $result = $mysqli ->query("INSERT INTO UserHistory VALUES ('$userID', '$username', '$teamID', '$leagueID', NOW(), '$type', '$detail')");
+
+  $mysqli -> close();
+
+  return true;
+}
+
+function addPlayer($userID, $username, $leagueID, $teamID, $playerName){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("UPDATE Player SET TeamID=0 WHERE TeamID='$teamID' AND FullName='$playerName'");
+
+  $type = "League member updated their roster";
+  $detail = "$username added $playerName from their team";
+  $result = $mysqli ->query("INSERT INTO UserHistory VALUES ('$userID', '$username', '$teamID', '$leagueID', NOW(), '$type', '$detail')");
+
+  $mysqli -> close();
+
+  return true;
+}
+
+
 
 function requestProcessor($request)
 {
@@ -585,6 +622,10 @@ function requestProcessor($request)
       return displayPlayersNames();
     case "displayGameLog":
       return displayGameLog($request['playerName']);
+    case "dropPlayer":
+      return dropPlayer($request['userID'], $request['username'], $request['leagueID'], $request['teamID'], $request['playerName']);
+    case "playerAdd":
+      return addPlayer($request['userID'], $request['username'], $request['leagueID'], $request['teamID'], $request['playerName']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }

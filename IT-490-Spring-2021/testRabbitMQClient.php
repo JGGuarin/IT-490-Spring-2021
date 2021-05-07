@@ -464,4 +464,55 @@ function displayGameLog($playerName){
   return $response;
 }
 
+function dropPlayer($userID, $username, $leagueID, $teamID, $playerName){
+  $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "drop player";
+  }
+
+  $request = array();
+  $request['type'] = "dropPlayer";
+  $request['userID'] = $userID;
+  $request['username'] = $username;
+  $request['leagueID'] = $leagueID;
+  $request['teamID'] = $teamID;
+  $request['playerName'] = $playerName;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}
+
+function addPlayer($userID, $username, $leagueID, $teamID, $playerName){
+  $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "add player";
+  }
+
+  $request = array();
+  $request['type'] = "addPlayer";
+  $request['userID'] = $userID;
+  $request['username'] = $username;
+  $request['leagueID'] = $leagueID;
+  $request['teamID'] = $teamID;
+  $request['playerName'] = $playerName;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}
+
+
 ?>
