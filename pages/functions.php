@@ -155,6 +155,68 @@ function playerDrop ($userID, $username, $leagueID, $teamID, $playerName) {
     echo "<script>alert('Player dropped!')</script>";
     return true;
 }
+ 
+function showTeamScores($teamName, $leagueID){
+    global $db, $t;
+
+    $s = "select * from Team where TeamName='$teamName' and LeagueID = '$leagueID'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+    $scores = array();
+    while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $wins = $r['Wins'];
+        $losses = $r['Losses'];
+        $ties = $r['Ties'];
+
+        array_push($scores, $wins, $losses, $ties);
+    }
+
+    return $scores;
+}
+
+function showLeagueMemberTeamName($Username, $leagueID){
+    global $db, $t;
+
+    $s = "select UserID from Users where Username = '$Username'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+
+    $userID = $r['UserID'];
+
+    $teamID = obtainTeamID($userID, $leagueID);
+
+    $teamName = getTeamName($teamID);
+
+    return $teamName;
+}
+
+function obtainTeamID($userID, $leagueID){
+    global $db, $t;
+
+    $s = "select TeamID from Team where UserID='$userID' and LeagueID = '$leagueID'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+
+    $teamID = $r["TeamID"];
+
+    return $teamID;
+}
+
+function obtainTeamName($teamID){
+    global $db, $t;
+
+    $s = "select TeamName from Team where TeamID = '$teamID'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+
+    $teamName = $r['TeamName'];
+    
+    return $teamName;
+
+}
 
 
 ?>
