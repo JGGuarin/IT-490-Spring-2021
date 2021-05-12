@@ -578,4 +578,26 @@ function acceptReq($friendUsername, $username){
   return $response;
 }
 
+function request($username, $friendUsername){
+  $client = new rabbitMQClient("testRabbitMQ.ini","fourthServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "send friend request";
+  }
+
+  $request = array();
+  $request['type'] = "request";
+  $request['friendUsername'] = $friendUsername;
+  $request['username'] = $username;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}
+
 ?>

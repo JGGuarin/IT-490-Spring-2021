@@ -651,10 +651,40 @@ function getFriends($username){
 
     //ADD RECIPOCAL RELATIONSHIP
     $result = $mysqli ->query("INSERT INTO `Relation` (`from`, `to`, `status`) VALUES ('$to','$from','F')");
-    return true;
 
     $mysqli -> close();
+
+    return true;
   }
+
+  function request($from, $to){
+    $host = '127.0.0.1';
+    $user = 'root';
+    $dbpass = 'root';
+    $db = 'newsql';
+    $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+    $result = $mysqli ->query("SELECT * FROM Relation WHERE `from`='$from' AND `to`='$to' AND `status`='F'");
+
+    $num = $result -> num_rows;
+
+    if ($num == 0){
+      //RUN THE NEXT PART
+      $result = $mysqli ->query("SELECT * FROM `Relation` WHERE (`status`='P' AND `from`='$from' AND `to`='$to') OR (`status`='P' AND `from`='$to' AND `to`='$from')");
+
+      $num = $result -> num_rows;
+
+      if ($num == 0){
+        $result = $mysqli ->query("INSERT INTO `Relation` (`from`, `to`, `status`) VALUES ('$from','$to','P')");
+        return 0; //"Friend request sent"
+      }
+
+      return 1; //"Already has a pending friend request"
+  }
+  
+  return 2; //"Already Friends"
+
+}
 
 
 
@@ -720,6 +750,8 @@ function requestProcessor($request)
       return getReq($request['username']);
     case "acceptReq":
       return acceptReq($request['friendUsername'], $request['username']);
+    case "request":
+      return request($request['username'], $request['friendUsername']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
