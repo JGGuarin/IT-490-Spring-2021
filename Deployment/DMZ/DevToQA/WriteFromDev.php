@@ -20,7 +20,7 @@ else
 
 //TODO: Pass Command Line Arguments for  FileLocation
 //TODO: Fix AUTO_INCREMENT
-$s = "UPDATE VersionList SET Working = 'Y', SystemType = 'QA' WHERE FileLocation = '$argv[1]' AND SystemMachine = 'Back'" ;
+$s = "INSERT INTO VersionList(`SystemType`, `SystemMachine`, `UploadDate`, `Working`, `FileLocation`) VALUES ('Development', 'DMZ', '$date', 'N', '$argv[1]')" ;
 $t = $db->query($s);
 
 $db->close();
