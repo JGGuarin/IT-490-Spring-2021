@@ -4,8 +4,7 @@ require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
-function authentication($username,$password)
-{
+function authentication($username,$password){
     /*$host = '10.192.233.107';
     $user = 'root';
     $dbpass = '';
@@ -20,7 +19,7 @@ function authentication($username,$password)
     $userInfo = array();
 
     $username = $mysqli->escape_string($username);
-    $result = $mysqli -> query("SELECT * FROM Users WHERE Username='$username' and Password='$password'");
+    $result = $mysqli -> query("SELECT * FROM Users WHERE Username='$username'");
     
     $user = $result -> fetch_assoc();
 
@@ -30,13 +29,21 @@ function authentication($username,$password)
       $mysqli -> close();
       return false;
     }else{
-          $pass = $user['Password'];
-          print_r($user);
-          echo "pass: $pass";
+          
+          $hashed_password = $user['Password'];
+
+          if (password_verify($password, $hashed_password)){
+            $mysqli -> close();
+            return true;
+          }
+          
+         
+          //$hashed_password = password_hash($pass, PASSWORD_DEFAULT);
+          //$result = $mysqli -> query("Update Users SET Password='$hashed_password' WHERE Username='$username'");
 
           $mysqli -> close();
 
-          return true;
+          return false; //remember to change this to false!
       }
       /*$userInfo['username'] = $user['Username'];
       $userInfo['userID'] = $user['UserID'];
@@ -46,6 +53,28 @@ function authentication($username,$password)
     return "i dont know what im doing";
 
     //return false if not valid
+}
+
+function createUserAccount($username, $password, $firstname, $lastname){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
+
+  $result = $mysqli ->query("INSERT INTO Users(`Username`, `Password`, `FirstName`, `LastName`) VALUES ('$username', '$hashed_password', '$firstname', '$lastname')");
+
+  $result = $mysqli ->query("select UserID from Users where Username='$username'");
+
+  $r = $result -> fetch_assoc();
+  
+  $userID = $r["UserID"];
+
+  $mysqli -> close();
+
+  return $userID;
 }
 
 function getUserInfo($username, $password){
@@ -124,16 +153,14 @@ function getUserInfo($username, $password){
 
 }
 
-
-function getUserID($username,$password)
-{
+function getUserID($username){
     $host = '127.0.0.1';
     $user = 'root';
     $dbpass = 'root';
     $db = 'newsql';
     $mysqli = new MySQLi($host, $user, $dbpass, $db);
 
-    $result = $mysqli ->query("select UserID from Users where Username='$username' and Password='$password'");
+    $result = $mysqli ->query("select UserID from Users where Username='$username'");
 
     $user = $result -> fetch_assoc();
 
@@ -610,77 +637,76 @@ function getFriends($username){
 
       return $requestUsernames;
     }
+}
 
+function getReq($username){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("SELECT * FROM `Relation` WHERE `status`='P' AND `to`='$username'");
+
+  $num = $result -> num_rows;
+  
+  //check to see if the user has any friends
+  if ($num == 0){
+    echo "No incoming friend requests yet";
+    return 0;
+  }else{
+  
+  $r = $result -> fetch_assoc();
+
+  echo "Incoming friend request from: <b>" . $r["from"] . "</b>";  
+  
+  $mysqli -> close();
+
+  return $r["from"];
   }
+}
 
-  function getReq($username){
-    $host = '127.0.0.1';
-    $user = 'root';
-    $dbpass = 'root';
-    $db = 'newsql';
-    $mysqli = new MySQLi($host, $user, $dbpass, $db);
+function acceptReq($from, $to){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
 
-    $result = $mysqli ->query("SELECT * FROM `Relation` WHERE `status`='P' AND `to`='$username'");
+  $result = $mysqli ->query("UPDATE `Relation` SET `status`='F' WHERE `status`='P' AND `from`='$from' AND `to`='$to'"); 
+
+  //ADD RECIPOCAL RELATIONSHIP
+  $result = $mysqli ->query("INSERT INTO `Relation` (`from`, `to`, `status`) VALUES ('$to','$from','F')");
+
+  $mysqli -> close();
+
+  return true;
+}
+
+function request($from, $to){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("SELECT * FROM Relation WHERE `from`='$from' AND `to`='$to' AND `status`='F'");
+
+  $num = $result -> num_rows;
+
+  if ($num == 0){
+    //RUN THE NEXT PART
+    $result = $mysqli ->query("SELECT * FROM `Relation` WHERE (`status`='P' AND `from`='$from' AND `to`='$to') OR (`status`='P' AND `from`='$to' AND `to`='$from')");
 
     $num = $result -> num_rows;
-    
-    //check to see if the user has any friends
-    if ($num == 0){
-      echo "No incoming friend requests yet";
-      return 0;
-    }else{
-    
-    $r = $result -> fetch_assoc();
-
-    echo "Incoming friend request from: <b>" . $r["from"] . "</b>";  
-    
-    $mysqli -> close();
-
-    return $r["from"];
-    }
-  }
-
-  function acceptReq($from, $to){
-    $host = '127.0.0.1';
-    $user = 'root';
-    $dbpass = 'root';
-    $db = 'newsql';
-    $mysqli = new MySQLi($host, $user, $dbpass, $db);
-
-    $result = $mysqli ->query("UPDATE `Relation` SET `status`='F' WHERE `status`='P' AND `from`='$from' AND `to`='$to'"); 
-
-    //ADD RECIPOCAL RELATIONSHIP
-    $result = $mysqli ->query("INSERT INTO `Relation` (`from`, `to`, `status`) VALUES ('$to','$from','F')");
-
-    $mysqli -> close();
-
-    return true;
-  }
-
-  function request($from, $to){
-    $host = '127.0.0.1';
-    $user = 'root';
-    $dbpass = 'root';
-    $db = 'newsql';
-    $mysqli = new MySQLi($host, $user, $dbpass, $db);
-
-    $result = $mysqli ->query("SELECT * FROM Relation WHERE `from`='$from' AND `to`='$to' AND `status`='F'");
-
-    $num = $result -> num_rows;
 
     if ($num == 0){
-      //RUN THE NEXT PART
-      $result = $mysqli ->query("SELECT * FROM `Relation` WHERE (`status`='P' AND `from`='$from' AND `to`='$to') OR (`status`='P' AND `from`='$to' AND `to`='$from')");
-
-      $num = $result -> num_rows;
-
-      if ($num == 0){
-        $result = $mysqli ->query("INSERT INTO `Relation` (`from`, `to`, `status`) VALUES ('$from','$to','P')");
-        $mysqli -> close();
-        return 0; //"Friend request sent"
-      }
+      $result = $mysqli ->query("INSERT INTO `Relation` (`from`, `to`, `status`) VALUES ('$from','$to','P')");
       $mysqli -> close();
-      return 1; //"Already has a pending friend request"
+      return 0; //"Friend request sent"
+    }
+    $mysqli -> close();
+    return 1; //"Already has a pending friend request"
   }
   $mysqli -> close();
   return 2; //"Already Friends"
@@ -711,26 +737,6 @@ function doesUserExist($username){
   return true;
 }
 
-function createUserAccount($username, $password, $firstname, $lastname){
-  $host = '127.0.0.1';
-  $user = 'root';
-  $dbpass = 'root';
-  $db = 'newsql';
-  $mysqli = new MySQLi($host, $user, $dbpass, $db);
-
-  $result = $mysqli ->query("INSERT INTO Users(`Username`, `Password`, `FirstName`, `LastName`) VALUES ('$username', '$password', '$firstname', '$lastname')");
-
-  $result = $mysqli ->query("select UserID from Users where Username='$username'");
-
-  $r = $result -> fetch_assoc();
-  
-  $userID = $r["UserID"];
-
-  $mysqli -> close();
-
-  return $userID;
-}
-
 
 
 function requestProcessor($request)
@@ -750,7 +756,7 @@ function requestProcessor($request)
     case "validate_session":
       return doValidate($request['sessionId']);
     case "getUserID":
-      return getUserID($request['username'], $request['password']);
+      return getUserID($request['username']);
     case "getFirstName":
       return getFirstName($request['userID']);
     case "getLastName":

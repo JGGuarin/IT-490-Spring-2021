@@ -83,7 +83,7 @@ function getUserInfo($username, $password){
   return $response;
 }
 
-function getUserId($username, $password){
+function getUserId($username){
   $client = new rabbitMQClient("testRabbitMQ.ini","secondServer");
   
   if (isset($argv[1]))
@@ -100,7 +100,6 @@ function getUserId($username, $password){
   //$request['username'] = $username;
   //$request['password'] = $password;
   $request['username'] = $username;
-  $request['password'] = $password;
   $request['message'] = $msg;
   $response = $client->send_request($request);
 
