@@ -514,4 +514,25 @@ function addPlayer($userID, $username, $leagueID, $teamID, $playerName){
   return $response;
 }
 
+function getFriends($username){
+  $client = new rabbitMQClient("testRabbitMQ.ini","secondServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "get friends list";
+  }
+
+  $request = array();
+  $request['type'] = "getFriends";
+  $request['username'] = $username;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}
+
 ?>

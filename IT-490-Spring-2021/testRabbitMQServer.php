@@ -568,6 +568,51 @@ function addPlayer($userID, $username, $leagueID, $teamID, $playerName){
   return true;
 }
 
+function getFriends($username){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("SELECT * FROM `Relation` WHERE `status`='F' AND (`from`='$username' OR `to`='$username')");
+
+  $user = $result -> fetch_assoc();
+
+  //check to see if the user has any friends
+
+  if ($result -> num_rows == 0){
+    echo "No friends yet";
+
+    $mysqli -> close();
+
+    return false;  
+  }else{
+    $toUsernames = array();
+    $fromUsernames = array();
+    
+    while ($r = $result -> fetch_assoc()){
+      $toUsername = $r["to"];
+      $fromUsername = $r["from"];
+
+      array_push($toUsernames, $toUsername);
+      array_push($fromUsernames, $fromUsername);
+    }
+
+    $requestUsernames = array();
+    for ($i=0; $i < count($toUsernames) ; $i++){
+        if ($toUsernames[$i] == $username){
+          array_push($requestUsernames, $fromUsernames[$i]);
+        }
+      }
+
+      $mysqli -> close();
+
+      return $requestUsernames;
+    }
+
+  }
+
 
 
 function requestProcessor($request)
@@ -626,6 +671,8 @@ function requestProcessor($request)
       return dropPlayer($request['userID'], $request['username'], $request['leagueID'], $request['teamID'], $request['playerName']);
     case "playerAdd":
       return addPlayer($request['userID'], $request['username'], $request['leagueID'], $request['teamID'], $request['playerName']);
+    case "getFriends":
+      return getFriends($request['username']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
