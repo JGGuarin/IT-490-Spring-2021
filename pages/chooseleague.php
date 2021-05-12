@@ -158,7 +158,7 @@ $leagues = getUserLeagues($userID);
                     <h3>Friend requests:</h3>
                         <?php $friendUsername = getReq($username);
                         if ($friendUsername == 0){
-                            echo "no friend requests yet";
+                            echo "no incoming riend requests yet";
                         }
 
                         if ($friendUsername !== 0){
@@ -168,6 +168,7 @@ $leagues = getUserLeagues($userID);
                             </form> ";
                             if(array_key_exists('button1', $_POST)) { 
                                 acceptReq($friendUsername, $username); 
+                                echo "friend request accepted";
                             }  
                         }
                         ?> 
