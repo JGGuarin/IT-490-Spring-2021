@@ -157,6 +157,9 @@ $leagues = getUserLeagues($userID);
 
                     <h3>Friend requests:</h3>
                         <?php $friendUsername = getReq($username);
+                        if ($friendUsername == 0){
+                            echo "no friend requests yet";
+                        }
 
                         if ($friendUsername !== 0){
                             echo "<form method='post'> 
