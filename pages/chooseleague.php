@@ -142,7 +142,17 @@ $leagues = getUserLeagues($userID);
                 </div>
                 <div class="col form">
                     <h3>Friends List:</h3>
-                        <?php getFriends($username); ?>
+                        <?php 
+                            $friends = getFriends($username); 
+                            if ($friends == false){
+                                echo "No friends yet<br>";
+                            }else{
+                                foreach($friends as $friend){
+                                    echo "$friend <br>";
+                                }
+                            }
+                        
+                        ?>
                     <hr>
 
                     <h3>Friend requests:</h3>
