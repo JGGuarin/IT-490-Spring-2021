@@ -600,4 +600,50 @@ function request($username, $friendUsername){
   return $response;
 }
 
+function doesUserExist($username){
+  $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "does user exist";
+  }
+
+  $request = array();
+  $request['type'] = "doesUserExist";
+  $request['username'] = $username;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}
+
+function createUserAccount($username, $password, $firstname, $lastname){
+  $client = new rabbitMQClient("testRabbitMQ.ini","thirdServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "create user account";
+  }
+
+  $request = array();
+  $request['type'] = "createUserAccount";
+  $request['username'] = $username;
+  $request['password'] = $password;
+  $request['firstname'] = $firstname;
+  $request['lastname'] = $lastname;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}
+
+
 ?>

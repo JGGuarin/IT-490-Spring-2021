@@ -676,14 +676,59 @@ function getFriends($username){
 
       if ($num == 0){
         $result = $mysqli ->query("INSERT INTO `Relation` (`from`, `to`, `status`) VALUES ('$from','$to','P')");
+        $mysqli -> close();
         return 0; //"Friend request sent"
       }
-
+      $mysqli -> close();
       return 1; //"Already has a pending friend request"
   }
-  
+  $mysqli -> close();
   return 2; //"Already Friends"
+}
 
+function doesUserExist($username){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("select * from Users where Username = '$username'");
+
+  $num = $result -> num_rows;
+
+  //if no rows are returned, the user doesnt exist
+  if ($num == 0){
+    $mysqli -> close();
+    return false;
+  }
+  
+  //access content of row in $t
+  $r = $result -> fetch_assoc();
+  
+  $mysqli -> close();
+  
+  return true;
+}
+
+function createUserAccount($username, $password, $firstname, $lastname){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("INSERT INTO Users(`Username`, `Password`, `FirstName`, `LastName`) VALUES ('$username', '$password', '$firstname', '$lastname')");
+
+  $result = $mysqli ->query("select UserID from Users where Username='$username'");
+
+  $r = $result -> fetch_assoc();
+  
+  $userID = $r["UserID"];
+
+  $mysqli -> close();
+
+  return $userID;
 }
 
 
@@ -752,6 +797,10 @@ function requestProcessor($request)
       return acceptReq($request['friendUsername'], $request['username']);
     case "request":
       return request($request['username'], $request['friendUsername']);
+    case "doesUserExist":
+      return doesUserExist($request['username']);
+    case "createUserAccount":
+      return createUserAccount($request['username'], $request['password'], $request['firstname'], $request['lastname']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
