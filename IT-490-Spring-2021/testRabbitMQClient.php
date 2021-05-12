@@ -535,4 +535,25 @@ function getFriends($username){
   return $response;
 }
 
+function getReq($username){
+  $client = new rabbitMQClient("testRabbitMQ.ini","thirdServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "get friend requests";
+  }
+
+  $request = array();
+  $request['type'] = "getReq";
+  $request['username'] = $username;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}
+
 ?>

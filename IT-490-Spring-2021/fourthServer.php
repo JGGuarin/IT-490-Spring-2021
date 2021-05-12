@@ -613,6 +613,31 @@ function getFriends($username){
 
   }
 
+  function getReq($username){
+    $host = '127.0.0.1';
+    $user = 'root';
+    $dbpass = 'root';
+    $db = 'newsql';
+    $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+    $result = $mysqli ->query("SELECT * FROM `Relation` WHERE `status`='P' AND `to`='$username'");
+
+    $num = $result -> num_rows;
+    
+    //check to see if the user has any friends
+    if ($num == 0){
+      echo "No incoming friend requests yet";
+      return 0;
+    }else{
+    
+    $r = $result -> fetch_assoc();
+
+    echo "Incoming friend request from: <b>" . $r["from"] . "</b>";  
+    
+    return $r["from"];
+    }
+  }
+
 
 
 function requestProcessor($request)
@@ -673,6 +698,8 @@ function requestProcessor($request)
       return addPlayer($request['userID'], $request['username'], $request['leagueID'], $request['teamID'], $request['playerName']);
     case "getFriends":
       return getFriends($request['username']);
+    case "getReq":
+      return getReq($request['username']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
