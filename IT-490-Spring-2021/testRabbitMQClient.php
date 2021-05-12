@@ -644,5 +644,27 @@ function createUserAccount($username, $password, $firstname, $lastname){
   return $response;
 }
 
+/*function calculatePoints($teamName, $leagueID){
+  $client = new rabbitMQClient("testRabbitMQ.ini","fourthServer");
+  
+  if (isset($argv[1]))
+  {
+    $msg = $argv[1];
+  }
+  else
+  {
+    $msg = "calculate points";
+  }
+
+  $request = array();
+  $request['type'] = "calculatePoints";
+  $request['teamName'] = $teamName;
+  $request['leagueID'] = $leagueID;
+  $request['message'] = $msg;
+  $response = $client->send_request($request);
+
+  return $response;
+}*/
+
 
 ?>

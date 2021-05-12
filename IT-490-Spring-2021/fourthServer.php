@@ -737,6 +737,40 @@ function doesUserExist($username){
   return true;
 }
 
+function calculatePoints($teamName, $leagueID){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = 'root';
+  $db = 'newsql';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("select TeamID from Team where TeamName='$teamName' and LeagueID = '$leagueID'");
+
+  $r = $result -> fetch_assoc();
+
+  $teamID = $r['TeamID'];
+
+  $result = $mysqli ->query("SELECT * FROM Player where TeamID = '$teamID'");
+
+  $fullnames = array();
+  while( $r = $result -> fetch_assoc()){
+      $fullname = $r["FullName"];
+      array_push($fullnames, $fullname);
+  }
+
+  $teamPoints = 0;
+  foreach($fullnames as $name){
+    $result = $mysqli ->query("SELECT Ppg FROM PlayerImport where FullName = '$name'");
+
+    $r = $result -> fetch_assoc();
+    $points = $r['Ppg'];
+    $teamPoints += $points;
+  }
+
+  return $teamPoints;
+
+}
+
 
 
 function requestProcessor($request)
@@ -807,13 +841,15 @@ function requestProcessor($request)
       return doesUserExist($request['username']);
     case "createUserAccount":
       return createUserAccount($request['username'], $request['password'], $request['firstname'], $request['lastname']);
+    case "calculatePoints":
+      return calculatePoints($request['teamName'], $request['leagueID']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
 
 $server = new rabbitMQServer("testRabbitMQ.ini","fourthServer");
 
-echo "testRabbitMQServer BEGIN".PHP_EOL;
+echo "Fourth Server BEGIN".PHP_EOL;
 $server->process_requests('requestProcessor');
 echo "testRabbitMQServer END".PHP_EOL;
 exit();
