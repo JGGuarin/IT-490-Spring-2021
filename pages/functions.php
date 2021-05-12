@@ -218,5 +218,38 @@ function obtainTeamName($teamID){
 
 }
 
+function calculatePoints($teamName, $leagueID){
+    global $db, $t;
+
+    $s = "select TeamID from Team where TeamName='$teamName' and LeagueID = '$leagueID'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+    $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+
+    $teamID = $r['TeamID'];
+
+    $s = "SELECT * FROM Player where TeamID = '$teamID'";
+    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+    $fullnames = array();
+    while($r = mysqli_fetch_array($t, MYSQLI_ASSOC)){
+        $fullname = $r["FullName"];
+        array_push($fullnames, $fullname);
+    }
+
+    $teamPoints = 0;
+    foreach($fullnames as $name){
+      $s = "SELECT Ppg FROM PlayerImport where FullName = '$name'";
+      ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+
+      $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+      $points = $r['Ppg'];
+      $teamPoints += $points;
+    }
+
+    return $teamPoints;
+
+  }
+
 
 ?>

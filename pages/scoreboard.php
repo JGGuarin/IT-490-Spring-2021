@@ -49,6 +49,8 @@ $leagueName = $_SESSION["leagueName"];
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
   <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="dist/sortable-tables.min.css">
+  <script src="dist/sortable-tables.min.js"></script>
 
   <meta name="theme-color" content="#fafafa">
 </head>
@@ -82,20 +84,74 @@ $leagueName = $_SESSION["leagueName"];
   <div class="card">
     <div class="container">
       <h2>Team Scores</h2>
-      <table class='no-border' width=50%>   
+      <table id='scoreTable' class='sortable-table' width=100%>   
+          <th class="numeric-sort">Total Points</th>     
           <th>Team</th> 
-          <th>Scores</th>      
+          <th>Scores</th> 
           <?php 
             $leagueMembers = displayLeagueMembers($leagueID);
             
-            
+            $pointsArray = array();
+            function makePointsArray($teamName, $points, $pointsArray){
+
+              $pointsArray[$teamName] = $points;
+
+              return $pointsArray;
+            }
+
             foreach ($leagueMembers as $leagueMember){
               $teamName = showLeagueMemberTeamName($leagueMember, $leagueID);
               $teamScores = showTeamScores($teamName, $leagueID);
-              echo "<tr><td></b>" . $teamName . "</td><td> $teamScores[0] - $teamScores[1] - $teamScores[2]" ."<br></td></tr>";
+            
+              $points = calculatePoints($teamName, $leagueID);
+
+              $pointsArray = makePointsArray($teamName, $points, $pointsArray);
+
+              echo "<tr><td></b>" . $points . "</td><td>$teamName</td><td> $teamScores[0] - $teamScores[1] - $teamScores[2]" ."<br></td></tr>";
+
             }
           ?>
       </table>
+            <br><br>
+      <p>Click the button to sort by league ranking:
+      <button onclick="sortTable()">Rank</button></p> 
+
+      <script>
+        function sortTable() {
+          var table, rows, switching, i, x, y, shouldSwitch;
+          table = document.getElementById("scoreTable");
+          switching = true;
+          /*Make a loop that will continue until
+          no switching has been done:*/
+          while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /*Loop through all table rows (except the
+            first, which contains table headers):*/
+            for (i = 1; i < (rows.length - 1); i++) {
+              //start by saying there should be no switching:
+              shouldSwitch = false;
+              /*Get the two elements you want to compare,
+              one from current row and one from the next:*/
+              x = rows[i].getElementsByTagName("TD")[0];
+              y = rows[i + 1].getElementsByTagName("TD")[0];
+              //check if the two rows should switch place:
+              if (Number(x.innerHTML) < Number(y.innerHTML)) {
+                //if so, mark as a switch and break the loop:
+                shouldSwitch = true;
+                break;
+              }
+            }
+            if (shouldSwitch) {
+              /*If a switch has been marked, make the switch
+              and mark that a switch has been done:*/
+              rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+              switching = true;
+            }
+          }
+        }
+        </script>
     </div>
   </div>
 
