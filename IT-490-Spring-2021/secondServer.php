@@ -634,8 +634,26 @@ function getFriends($username){
 
     echo "Incoming friend request from: <b>" . $r["from"] . "</b>";  
     
+    $mysqli -> close();
+
     return $r["from"];
     }
+  }
+
+  function acceptReq($from, $to){
+    $host = '127.0.0.1';
+    $user = 'root';
+    $dbpass = 'root';
+    $db = 'newsql';
+    $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+    $result = $mysqli ->query("UPDATE `Relation` SET `status`='F' WHERE `status`='P' AND `from`='$from' AND `to`='$to'"); 
+
+    //ADD RECIPOCAL RELATIONSHIP
+    $result = $mysqli ->query("INSERT INTO `Relation` (`from`, `to`, `status`) VALUES ('$to','$from','F')");
+    return true;
+
+    $mysqli -> close();
   }
 
 
@@ -700,6 +718,8 @@ function requestProcessor($request)
       return getFriends($request['username']);
     case "getReq":
       return getReq($request['username']);
+    case "acceptReq":
+      return acceptReq($request['friendUsername'], $request['username']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
