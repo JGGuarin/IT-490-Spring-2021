@@ -49,6 +49,9 @@ $playerName = $_GET['playerName'];
   <link rel="apple-touch-icon" href="icon.png">
   <!-- Place favicon.ico in the root directory -->
 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
   <link rel="stylesheet" href="main.css">
 
   <meta name="theme-color" content="#fafafa">
@@ -106,6 +109,7 @@ $playerName = $_GET['playerName'];
     <div class="container">
 
       <h2>PLAYER STATS </h2>
+      <div class = "table-responsive">
       <table class="collapsed team" width=100%>
         <col>
         <colgroup span="2" class="right-border"></colgroup>
@@ -175,6 +179,7 @@ $playerName = $_GET['playerName'];
               echo "</tr>";                
           ?>     
       </table>
+      </div>
     </div>
   </div>
 
@@ -184,6 +189,7 @@ $playerName = $_GET['playerName'];
     <div class="container">
 
       <h2>GAME LOGS </h2>
+      <div class = "table-responsive">
       <table class="collapsed team" id="playerTable" width=100%>
         <tr class="header">
           <th scope="col">DATE</th>
@@ -212,6 +218,7 @@ $playerName = $_GET['playerName'];
         ?>
                     
       </table>
+      </div>
     </div>
   </div>
 
@@ -221,6 +228,7 @@ $playerName = $_GET['playerName'];
     <div class="container">
 
       <h2>TRANSACTIONS </h2>
+      <div class = "table-responsive">
       <table class="collapsed" width=100%>
         <tr>
           <th>Date</th>
@@ -240,6 +248,7 @@ $playerName = $_GET['playerName'];
           echo "</tr>";
         ?>
       </table>
+      </div>
     </div>
   </div>
 

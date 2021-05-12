@@ -1,4 +1,7 @@
 <?php
+session_start();
+
+
 include('path.inc');
 include('get_host_info.inc');
 include('rabbitMQLib.inc');
@@ -11,7 +14,6 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 include('functions.php');
 include('ini.php');
 
-session_start();
 
 if (! $_SESSION["logged"]){
   header("Location: login.html");
@@ -48,7 +50,11 @@ $leagueName = $_SESSION["leagueName"];
   <link rel="apple-touch-icon" href="icon.png">
   <!-- Place favicon.ico in the root directory -->
 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
   <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="main.scss">
+
 
   <meta name="theme-color" content="#fafafa">
 </head>
@@ -97,84 +103,86 @@ $leagueName = $_SESSION["leagueName"];
     <div class="container">
 
       <h2>TEAM STATS </h2>
-      <table class="collapsed team" width=100%>
-        <col>
-        <colgroup span="2" class="right-border"></colgroup>
-        <colgroup span="9"></colgroup>
-        <tr>
-          <th colspan="2" scope="colgroup">STARTERS</th>
-          <th colspan="9" scope="colgroup">STATS</th>
-        </tr>
-        <tr>
-          <th scope="col">Slot</th>
-          <th scope="col">Player</th>
-          <th scope="col">FG%</th>
-          <th scope="col">FT%</th>
-          <th scope="col">3PM</th>
-          <th scope="col">RB</th>
-          <th scope="col">AST</th>
-          <th scope="col">STL</th>
-          <th scope="col">BLK</th>
-          <th scope="col">PTS</th>
-        </tr>
-          <?php 
-            $names = displayTeamPlayersNames($teamID);
+      <div class = "table-responsive">
+        <table class="collapsed team" width=100%>
+          <col>
+          <colgroup span="2" class="right-border"></colgroup>
+          <colgroup span="9"></colgroup>
+          <tr>
+            <th colspan="2" scope="colgroup">STARTERS</th>
+            <th colspan="9" scope="colgroup">STATS</th>
+          </tr>
+          <tr>
+            <th scope="col">Slot</th>
+            <th scope="col">Player</th>
+            <th scope="col">FG%</th>
+            <th scope="col">FT%</th>
+            <th scope="col">3PM</th>
+            <th scope="col">RB</th>
+            <th scope="col">AST</th>
+            <th scope="col">STL</th>
+            <th scope="col">BLK</th>
+            <th scope="col">PTS</th>
+          </tr>
+            <?php 
+              $names = displayTeamPlayersNames($teamID);
 
-            for ($i=0; $i < count($names); $i++){
+              for ($i=0; $i < count($names); $i++){
 
-              $positions = displayTeamPlayersInfo('Pos', $names[$i]);
-              $teams = displayTeamPlayersInfo('Team',$names[$i]);
-              $ft = displayTeamPlayersInfo('Ft',$names[$i]);
-              $tp = displayTeamPlayersInfo('Tp',$names[$i]);
-              $fg = displayTeamPlayersInfo('Fg',$names[$i]);
-              $ppg = displayTeamPlayersInfo('Ppg',$names[$i]);
-              $rpg = displayTeamPlayersInfo('Rpg',$names[$i]);
-              $apg = displayTeamPlayersInfo('Apg',$names[$i]);
-              $spg = displayTeamPlayersInfo('Spg',$names[$i]);
-              $bpg = displayTeamPlayersInfo('Bpg',$names[$i]);
+                $positions = displayTeamPlayersInfo('Pos', $names[$i]);
+                $teams = displayTeamPlayersInfo('Team',$names[$i]);
+                $ft = displayTeamPlayersInfo('Ft',$names[$i]);
+                $tp = displayTeamPlayersInfo('Tp',$names[$i]);
+                $fg = displayTeamPlayersInfo('Fg',$names[$i]);
+                $ppg = displayTeamPlayersInfo('Ppg',$names[$i]);
+                $rpg = displayTeamPlayersInfo('Rpg',$names[$i]);
+                $apg = displayTeamPlayersInfo('Apg',$names[$i]);
+                $spg = displayTeamPlayersInfo('Spg',$names[$i]);
+                $bpg = displayTeamPlayersInfo('Bpg',$names[$i]);
 
-              echo "<tr>";
-              echo "<td>";
-              echo $positions;
-              echo "</td>";
-              echo "<td>";
-              echo "<a href='player.php?playerName=" . $names[$i] . "'>$names[$i]</a>";
-              echo "<p class='proTeam'>";
-              echo $teams;
-              echo "</p>";
-              echo "<a href='dropPlayers.php?playerName=" . $names[$i] . "'><button type='button' name='droplayer'>Drop Player</button></a>";
-              echo "</td>";
-              echo "<td>";
-              echo $fg;
-              echo "</td>";
-              echo "<td>";
-              echo $ft;
-              echo "</td>";
-              echo "<td>";
-              echo $tp;
-              echo "</td>";
-              echo "<td>";
-              echo $rpg;
-              echo "</td>";
-              echo "<td>";
-              echo $apg;
-              echo "</td>";
-              echo "<td>";
-              echo $spg;
-              echo "</td>";
-              echo "<td>";
-              echo $bpg;
-              echo "</td>";
-              echo "<td>";
-              echo $ppg;
-              echo "</td>";
-              echo "</tr>";
-              
+                echo "<tr>";
+                echo "<td>";
+                echo $positions;
+                echo "</td>";
+                echo "<td>";
+                echo "<a href='player.php?playerName=" . $names[$i] . "'>$names[$i]</a>";
+                echo "<p class='proTeam'>";
+                echo $teams;
+                echo "</p>";
+                echo "<a href='dropPlayers.php?playerName=" . $names[$i] . "'><button type='button' name='droplayer'>Drop Player</button></a>";
+                echo "</td>";
+                echo "<td>";
+                echo $fg;
+                echo "</td>";
+                echo "<td>";
+                echo $ft;
+                echo "</td>";
+                echo "<td>";
+                echo $tp;
+                echo "</td>";
+                echo "<td>";
+                echo $rpg;
+                echo "</td>";
+                echo "<td>";
+                echo $apg;
+                echo "</td>";
+                echo "<td>";
+                echo $spg;
+                echo "</td>";
+                echo "<td>";
+                echo $bpg;
+                echo "</td>";
+                echo "<td>";
+                echo $ppg;
+                echo "</td>";
+                echo "</tr>";
+                
 
-            }                
+              }                
 
-          ?>     
-      </table>
+            ?>     
+        </table>
+      </div>
     </div>
   </div>
 
