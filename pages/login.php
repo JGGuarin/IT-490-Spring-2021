@@ -14,7 +14,7 @@ $username = $_POST["username"];
 $password = $_POST["password"];
 
 if (authentication($username,$password)){
-	$userID = getUserId($username, $password);
+	$userID = getUserId($username);
 	$firstname = getFirstName($userID);
 	$lastname = getLastName($userID);
 
