@@ -5,14 +5,13 @@ session_start();
 include('path.inc');
 include('get_host_info.inc');
 include('rabbitMQLib.inc');
-include('logger.php'); // "Importing" logger.php
-include('../IT-490-Spring-2021/testRabbitMQClient.php');
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
-
 include('functions.php');
 include('ini.php');
+include('logger.php'); // "Importing" logger.php
+include('../IT-490-Spring-2021/testRabbitMQClient.php');
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
 
 if (! $_SESSION["logged"]){
@@ -87,7 +86,7 @@ $leagueName = $_SESSION["leagueName"];
     <div class="container">
       <div class="row">
         <div class="column left">
-          <img src="jersey%20logo.jpg" height=100px width=100px />
+          <img src="jerseylogo.jpg" height=100px width=100px />
         </div>
         <div class="column right">
           <h4><b><?php echo $teamName ?></b></h4>

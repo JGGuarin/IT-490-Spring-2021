@@ -8,9 +8,9 @@ include('ini.php');
 include('functions.php');
 include('logger.php'); // "Importing" logger.php
 include('../IT-490-Spring-2021/testRabbitMQClient.php');
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
 if (! $_SESSION["logged"]){
   header("Location: login.html");
@@ -83,7 +83,7 @@ $leagueName = $_SESSION["leagueName"];
       <div class="row">
         <div class="column left">
             <h2>My Team</h2>
-          <img src="jersey%20logo.jpg" height=100px width=100px />
+          <img src="jerseylogo.jpg" height=100px width=100px />
           <h3><?php echo $teamName ?></h3>
           <?php echo $username?><br>
           <a href="myteam.php">View roster</a>

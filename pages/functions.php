@@ -1,6 +1,5 @@
 <?php
 
-
 function displayTeamPlayersNames($teamID){
     global $db, $t;
 
@@ -249,7 +248,7 @@ function calculatePoints($teamName, $leagueID){
 
     return $teamPoints;
 
-  }
+}
 
 
 ?>
