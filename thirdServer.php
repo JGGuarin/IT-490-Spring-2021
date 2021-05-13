@@ -4,8 +4,7 @@ require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
-function authentication($username,$password)
-{
+function authentication($username,$password){
     /*$host = '10.192.233.107';
     $user = 'root';
     $dbpass = '';
@@ -20,7 +19,7 @@ function authentication($username,$password)
     $userInfo = array();
 
     $username = $mysqli->escape_string($username);
-    $result = $mysqli -> query("SELECT * FROM Users WHERE Username='$username' and Password='$password'");
+    $result = $mysqli -> query("SELECT * FROM Users WHERE Username='$username'");
     
     $user = $result -> fetch_assoc();
 
@@ -30,13 +29,21 @@ function authentication($username,$password)
       $mysqli -> close();
       return false;
     }else{
-          $pass = $user['Password'];
-          print_r($user);
-          echo "pass: $pass";
+          
+          $hashed_password = $user['Password'];
+
+          if (password_verify($password, $hashed_password)){
+            $mysqli -> close();
+            return true;
+          }
+          
+         
+          //$hashed_password = password_hash($pass, PASSWORD_DEFAULT);
+          //$result = $mysqli -> query("Update Users SET Password='$hashed_password' WHERE Username='$username'");
 
           $mysqli -> close();
 
-          return true;
+          return false; //remember to change this to false!
       }
       /*$userInfo['username'] = $user['Username'];
       $userInfo['userID'] = $user['UserID'];
@@ -48,11 +55,33 @@ function authentication($username,$password)
     //return false if not valid
 }
 
+function createUserAccount($username, $password, $firstname, $lastname){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = '';
+  $db = 'FantasySports';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
+
+  $result = $mysqli ->query("INSERT INTO Users(`Username`, `Password`, `FirstName`, `LastName`) VALUES ('$username', '$hashed_password', '$firstname', '$lastname')");
+
+  $result = $mysqli ->query("select UserID from Users where Username='$username'");
+
+  $r = $result -> fetch_assoc();
+  
+  $userID = $r["UserID"];
+
+  $mysqli -> close();
+
+  return $userID;
+}
+
 function getUserInfo($username, $password){
-    $host = '127.0.0.1';
-    $user = 'root';
-    $dbpass = '';
-    $db = 'FantasySports';
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = '';
+  $db = 'FantasySports';
     $mysqli = new MySQLi($host, $user, $dbpass, $db);
 
     $userInfo = array();
@@ -124,16 +153,14 @@ function getUserInfo($username, $password){
 
 }
 
-
-function getUserID($username,$password)
-{
-    $host = '127.0.0.1';
-    $user = 'root';
-    $dbpass = '';
-    $db = 'FantasySports';
+function getUserID($username){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = '';
+  $db = 'FantasySports';
     $mysqli = new MySQLi($host, $user, $dbpass, $db);
 
-    $result = $mysqli ->query("select UserID from Users where Username='$username' and Password='$password'");
+    $result = $mysqli ->query("select UserID from Users where Username='$username'");
 
     $user = $result -> fetch_assoc();
 
@@ -147,10 +174,10 @@ function getUserID($username,$password)
 }
 
 function getFirstName($userID){
-    $host = '127.0.0.1';
-    $user = 'root';
-    $dbpass = '';
-    $db = 'FantasySports';
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = '';
+  $db = 'FantasySports';
     $mysqli = new MySQLi($host, $user, $dbpass, $db);
 
     $result = $mysqli ->query("select FirstName from Users where UserID='$userID'");
@@ -568,6 +595,182 @@ function addPlayer($userID, $username, $leagueID, $teamID, $playerName){
   return true;
 }
 
+function getFriends($username){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = '';
+  $db = 'FantasySports';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("SELECT * FROM `Relation` WHERE `status`='F' AND (`from`='$username' OR `to`='$username')");
+
+  $user = $result -> fetch_assoc();
+
+  //check to see if the user has any friends
+
+  if ($result -> num_rows == 0){
+    echo "No friends yet";
+
+    $mysqli -> close();
+
+    return false;  
+  }else{
+    $toUsernames = array();
+    $fromUsernames = array();
+    
+    while ($r = $result -> fetch_assoc()){
+      $toUsername = $r["to"];
+      $fromUsername = $r["from"];
+
+      array_push($toUsernames, $toUsername);
+      array_push($fromUsernames, $fromUsername);
+    }
+
+    $requestUsernames = array();
+    for ($i=0; $i < count($toUsernames) ; $i++){
+        if ($toUsernames[$i] == $username){
+          array_push($requestUsernames, $fromUsernames[$i]);
+        }
+      }
+
+      $mysqli -> close();
+
+      return $requestUsernames;
+    }
+}
+
+function getReq($username){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = '';
+  $db = 'FantasySports';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("SELECT * FROM `Relation` WHERE `status`='P' AND `to`='$username'");
+
+  $num = $result -> num_rows;
+  
+  //check to see if the user has any friends
+  if ($num == 0){
+    echo "No incoming friend requests yet";
+    return 0;
+  }else{
+  
+  $r = $result -> fetch_assoc();
+
+  echo "Incoming friend request from: <b>" . $r["from"] . "</b>";  
+  
+  $mysqli -> close();
+
+  return $r["from"];
+  }
+}
+
+function acceptReq($from, $to){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = '';
+  $db = 'FantasySports';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("UPDATE `Relation` SET `status`='F' WHERE `status`='P' AND `from`='$from' AND `to`='$to'"); 
+
+  //ADD RECIPOCAL RELATIONSHIP
+  $result = $mysqli ->query("INSERT INTO `Relation` (`from`, `to`, `status`) VALUES ('$to','$from','F')");
+
+  $mysqli -> close();
+
+  return true;
+}
+
+function request($from, $to){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = '';
+  $db = 'FantasySports';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("SELECT * FROM Relation WHERE `from`='$from' AND `to`='$to' AND `status`='F'");
+
+  $num = $result -> num_rows;
+
+  if ($num == 0){
+    //RUN THE NEXT PART
+    $result = $mysqli ->query("SELECT * FROM `Relation` WHERE (`status`='P' AND `from`='$from' AND `to`='$to') OR (`status`='P' AND `from`='$to' AND `to`='$from')");
+
+    $num = $result -> num_rows;
+
+    if ($num == 0){
+      $result = $mysqli ->query("INSERT INTO `Relation` (`from`, `to`, `status`) VALUES ('$from','$to','P')");
+      $mysqli -> close();
+      return 0; //"Friend request sent"
+    }
+    $mysqli -> close();
+    return 1; //"Already has a pending friend request"
+  }
+  $mysqli -> close();
+  return 2; //"Already Friends"
+}
+
+function doesUserExist($username){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = '';
+  $db = 'FantasySports';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("select * from Users where Username = '$username'");
+
+  $num = $result -> num_rows;
+
+  //if no rows are returned, the user doesnt exist
+  if ($num == 0){
+    $mysqli -> close();
+    return false;
+  }
+  
+  //access content of row in $t
+  $r = $result -> fetch_assoc();
+  
+  $mysqli -> close();
+  
+  return true;
+}
+
+function calculatePoints($teamName, $leagueID){
+  $host = '127.0.0.1';
+  $user = 'root';
+  $dbpass = '';
+  $db = 'FantasySports';
+  $mysqli = new MySQLi($host, $user, $dbpass, $db);
+
+  $result = $mysqli ->query("select TeamID from Team where TeamName='$teamName' and LeagueID = '$leagueID'");
+
+  $r = $result -> fetch_assoc();
+
+  $teamID = $r['TeamID'];
+
+  $result = $mysqli ->query("SELECT * FROM Player where TeamID = '$teamID'");
+
+  $fullnames = array();
+  while( $r = $result -> fetch_assoc()){
+      $fullname = $r["FullName"];
+      array_push($fullnames, $fullname);
+  }
+
+  $teamPoints = 0;
+  foreach($fullnames as $name){
+    $result = $mysqli ->query("SELECT Ppg FROM PlayerImport where FullName = '$name'");
+
+    $r = $result -> fetch_assoc();
+    $points = $r['Ppg'];
+    $teamPoints += $points;
+  }
+
+  return $teamPoints;
+
+}
+
 
 
 function requestProcessor($request)
@@ -587,7 +790,7 @@ function requestProcessor($request)
     case "validate_session":
       return doValidate($request['sessionId']);
     case "getUserID":
-      return getUserID($request['username'], $request['password']);
+      return getUserID($request['username']);
     case "getFirstName":
       return getFirstName($request['userID']);
     case "getLastName":
@@ -626,6 +829,20 @@ function requestProcessor($request)
       return dropPlayer($request['userID'], $request['username'], $request['leagueID'], $request['teamID'], $request['playerName']);
     case "playerAdd":
       return addPlayer($request['userID'], $request['username'], $request['leagueID'], $request['teamID'], $request['playerName']);
+    case "getFriends":
+      return getFriends($request['username']);
+    case "getReq":
+      return getReq($request['username']);
+    case "acceptReq":
+      return acceptReq($request['friendUsername'], $request['username']);
+    case "request":
+      return request($request['username'], $request['friendUsername']);
+    case "doesUserExist":
+      return doesUserExist($request['username']);
+    case "createUserAccount":
+      return createUserAccount($request['username'], $request['password'], $request['firstname'], $request['lastname']);
+    case "calculatePoints":
+      return calculatePoints($request['teamName'], $request['leagueID']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
